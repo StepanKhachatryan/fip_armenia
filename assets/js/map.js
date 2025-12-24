@@ -1,17 +1,38 @@
-var map = L.map('map-container').setView([40.0691, 45.0382], 8);
-var markersLayer = L.layerGroup().addTo(map);
+// Global variable to hold the map instance
+var map;
+var markersLayer = new L.LayerGroup(); // Group to hold all markers
 
-function initMapMarkers(data) {
-    data.forEach(item => {
-        // Logic to choose icon color based on severity
+function initMap() {
+    // 1. Initialize Map centered on Armenia
+    map = L.map('map').setView([40.0691, 45.0382], 8);
+
+    // 2. Add OpenStreetMap Tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // 3. Add the layer group to the map
+    markersLayer.addTo(map);
+}
+
+function updateMarkers(data) {
+    // Clear existing markers before adding new ones
+    markersLayer.clearLayers();
+
+    data.forEach(function(item) {
         var marker = L.marker([item.lat, item.lng]);
-        
-        // Logic to build the iframe popup
-        marker.bindPopup(buildPopupHTML(item));
-        
-        // Add date metadata to the object for filtering later
-        marker.options.date = new Date(item.date);
-        
+
+        // Build the Popup HTML
+        var popupContent = `
+            <div class="video-popup">
+                <h3>${item.title}</h3>
+                <p>📅 ${item.date}</p>
+                <iframe src="${item.video_url}" frameborder="0" allowfullscreen></iframe>
+                <p>${item.description}</p>
+            </div>
+        `;
+
+        marker.bindPopup(popupContent);
         markersLayer.addLayer(marker);
     });
 }
