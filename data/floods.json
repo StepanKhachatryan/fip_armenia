@@ -1,1 +1,22 @@
-
+[
+  {
+    "id": 101,
+    "lat": 40.7929,
+    "lng": 44.4921,
+    "date": "2024-05-26",
+    "title": "Debed River Overflow",
+    "video_type": "youtube",
+    "video_id": "dQw4w9WgXcQ", 
+    "severity": "high"
+  },
+  {
+    "id": 102,
+    "lat": 40.1872,
+    "lng": 44.5152,
+    "date": "2023-08-15",
+    "title": "Yerevan Street Flood",
+    "video_type": "facebook",
+    "video_link": "https://facebook.com/watch/...",
+    "severity": "medium"
+  }
+]
