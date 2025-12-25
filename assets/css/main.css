@@ -4,61 +4,53 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden; /* Prevents scrollbars on the main page */
+    /* Updated Font Family to Noto Sans Armenian */
+    font-family: 'Noto Sans Armenian', Arial, sans-serif;
+    overflow: hidden; 
 }
 
-/* Make map take full screen */
 #map {
     height: 100vh;
     width: 100%;
     z-index: 1;
 }
 
-/* --- LEAFLET CONTROL OVERRIDES (Moving Zoom Buttons) --- */
-/* Move the Zoom Buttons (+/-) down so they don't hide behind the header */
+/* Move Leaflet Zoom Controls down */
 .leaflet-top {
-    top: 100px; /* Header is ~70px + 20px margin, so 100px is safe */
+    top: 100px; 
 }
 
-
 /* =========================================
-   2. HEADER (Floating Glass Bar)
+   2. HEADER (Glassmorphism)
    ========================================= */
 #main-header {
-    position: absolute; /* Floats over the map */
-    top: 20px;          /* Space from top */
-    left: 20px;         /* Space from left */
-    right: 20px;        /* Space from right */
-    height: 70px;       /* Fixed height */
-    
-    /* 30% Transparency (0.7 Opacity) + Blur Effect */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 70px;
     background: rgba(255, 255, 255, 0.7); 
-    backdrop-filter: blur(10px);          /* The "Frosted Glass" effect */
-    -webkit-backdrop-filter: blur(10px);  /* Safari support */
-    
-    border-radius: 15px; /* Rounded corners */
-    
+    backdrop-filter: blur(10px);         
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
     display: flex;
-    justify-content: space-between; /* Space between Logo and Buttons */
+    justify-content: space-between;
     align-items: center;
     padding: 0 25px;
-    box-sizing: border-box;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Soft shadow */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     z-index: 1500; 
 }
 
-/* Logo & Title Area */
 .header-left {
     display: flex;
     align-items: center;
     gap: 15px;
-    flex: 1; /* Allow this section to grow */
-    overflow: hidden; /* Prevent text overflow */
+    flex: 1;
+    overflow: hidden;
 }
 
 .logo {
-    height: 40px; /* FIXED: Logo is now much smaller */
+    height: 40px; 
     width: auto;
     object-fit: contain;
 }
@@ -67,56 +59,44 @@ body {
     font-size: 18px; 
     color: #333;
     margin: 0;
-    font-weight: bold;
-    white-space: nowrap; /* Force one line */
+    font-weight: 700; /* Bold */
+    white-space: nowrap; 
     overflow: hidden;
-    text-overflow: ellipsis; /* Add "..." if screen is too small */
+    text-overflow: ellipsis;
     line-height: 1.2;
 }
 
-/* Header Buttons Area */
 .header-right {
     display: flex;
     gap: 10px;
-    flex-shrink: 0; /* Prevent buttons from squishing */
+    flex-shrink: 0; 
 }
 
-/* General Button Styles */
+/* Buttons */
 .btn {
-    padding: 10px 20px; /* Slightly larger clickable area */
+    padding: 10px 20px;
     text-decoration: none;
     font-size: 14px;
-    border-radius: 8px; /* Softer edges */
-    font-weight: bold;
+    border-radius: 8px;
+    font-weight: 700; /* Bold */
     cursor: pointer;
     transition: all 0.2s;
     border: none;
-    font-family: Arial, sans-serif;
     display: inline-block;
-    color: white; /* Default text color */
+    color: white; 
+    font-family: 'Noto Sans Armenian', sans-serif;
 }
 .btn:hover {
-    transform: translateY(-2px); /* Slight lift on hover */
+    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Specific Button Colors (Your requested hex codes) */
-.btn-submit {
-    background-color: #00a97a; /* Greenish */
-    color: white;
-}
-.btn-donate {
-    background-color: #f7db5d; /* Yellow */
-    color: #333; /* Dark text for contrast on yellow */
-}
-.btn-info {
-    background-color: #0c8495; /* Teal */
-    color: white;
-}
-
+.btn-submit { background-color: #00a97a; color: white; }
+.btn-donate { background-color: #f7db5d; color: #333; }
+.btn-info   { background-color: #0c8495; color: white; }
 
 /* =========================================
-   3. FLOATING CONTROLS (Bottom Slider)
+   3. SLIDER CONTROLS
    ========================================= */
 #controls {
     position: absolute;
@@ -126,64 +106,62 @@ body {
     padding: 0 60px;     
     box-sizing: border-box; 
     background: transparent; 
-    box-shadow: none;        
     z-index: 1000;       
 }
 
 #date-label { display: none; }
 
+/* --- SLIDER VISUALS (Updated to your colors) --- */
 
-/* =========================================
-   4. SLIDER STYLING (noUiSlider Overrides)
-   ========================================= */
-
-/* The Track */
+/* The Track (Unselected Grey) */
 .noUi-target {
     border: none;
-    background: #b3d9ff; 
+    background: #e9ecef; /* Light Grey from image */
     box-shadow: none;
-    height: 6px;         
-    border-radius: 3px;
+    height: 8px;         
+    border-radius: 4px;
     margin-bottom: 25px; 
 }
 
-/* The Connect Bar (Selection) */
+/* The Connect Bar (Selected Blue) */
 .noUi-connect {
-    background: #004d99; 
+    background: #2a6395; /* The Specific Blue from your image */
 }
 
-/* The Handles */
+/* The Handles (Smaller Squares) */
 .noUi-handle {
-    height: 18px;
-    width: 18px;
-    top: -6px;          
-    border-radius: 3px; 
+    height: 14px;       /* Smaller height */
+    width: 14px;        /* Smaller width (Square) */
+    top: -3px;          /* Center it on the track */
+    border-radius: 3px; /* Slightly rounded square */
     background: #fff;   
-    border: 3px solid #004d99; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    border: 1px solid #ced4da; /* Subtle grey border */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     cursor: grab;
 }
 .noUi-handle:before, .noUi-handle:after { display: none; }
 
-/* Tooltips */
+/* Tooltips (Floating Dates) */
 .noUi-tooltip {
     display: block;
-    background: #004d99; 
+    background: #2d353c; /* Dark Charcoal from image */
     color: #fff;         
     border-radius: 4px;
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Noto Sans Armenian', sans-serif;
     margin-bottom: 5px; 
 }
 
-/* The Ticks/Pips */
+/* Pips (Year Labels) */
 .noUi-pips-horizontal {
     padding: 12px 0;
     height: 40px;
     font-size: 12px;
     color: #333;
+    font-family: 'Noto Sans Armenian', sans-serif;
 }
 .noUi-marker-horizontal.noUi-marker { width: 1px; background: #999; }
 .noUi-marker-horizontal.noUi-marker-normal { display: none; }
@@ -191,14 +169,13 @@ body {
 .noUi-value-horizontal {
     font-size: 14px;
     color: #000;
-    font-weight: bold;
+    font-weight: 700;
     margin-top: 5px;
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
 }
 
-
 /* =========================================
-   5. SIDEBAR (Video Panel)
+   4. SIDEBAR & MODAL
    ========================================= */
 #video-sidebar {
     position: fixed;
@@ -212,16 +189,16 @@ body {
     box-shadow: -5px 0 15px rgba(0,0,0,0.5);
     transition: right 0.3s ease-in-out; 
     padding: 20px;
-    padding-top: 100px; /* Increased padding so content clears the header if overlapping */
+    padding-top: 100px; 
     box-sizing: border-box;
     overflow-y: auto; 
+    font-family: 'Noto Sans Armenian', sans-serif;
 }
-
 #video-sidebar.active { right: 0; }
 
 #close-sidebar {
     position: absolute;
-    top: 25px; /* Adjusted for new layout */
+    top: 25px;
     right: 25px;
     background: none;
     border: none;
@@ -230,41 +207,11 @@ body {
     cursor: pointer;
     line-height: 1;
 }
-#close-sidebar:hover { color: #ff4444; }
 
-.sidebar-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4db8ff; 
-    margin-bottom: 5px;
-}
-.sidebar-date {
-    font-size: 14px;
-    color: #bbbbbb; 
-    margin-bottom: 20px;
-    border-bottom: 1px solid #444;
-    padding-bottom: 15px;
-    display: block;
-}
-.sidebar-video-container iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9; 
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    background: #000;
-}
-.sidebar-description {
-    margin-top: 20px;
-    line-height: 1.6;
-    color: #e0e0e0;
-    font-size: 14px;
-}
+.sidebar-title { font-weight: 700; color: #4db8ff; margin-bottom: 5px; font-size: 20px;}
+.sidebar-date { font-size: 14px; color: #bbbbbb; border-bottom: 1px solid #444; padding-bottom: 15px; display: block; margin-bottom: 20px;}
 
-
-/* =========================================
-   6. MODAL (More Info Popup)
-   ========================================= */
+/* Modal */
 .modal {
     display: none; 
     position: fixed; 
@@ -275,8 +222,8 @@ body {
     height: 100%; 
     background-color: rgba(0,0,0,0.6); 
     backdrop-filter: blur(3px); 
+    font-family: 'Noto Sans Armenian', sans-serif;
 }
-
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto; 
@@ -286,9 +233,7 @@ body {
     max-width: 600px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
-    font-family: Arial, sans-serif;
 }
-
 .close-modal {
     color: #aaa;
     float: right;
@@ -296,7 +241,4 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
-.close-modal:hover { color: black; }
-
-.modal-content h2 { margin-top: 0; color: #333; }
-.modal-content p, .modal-content ul { color: #555; line-height: 1.6; }
+.close-modal:hover { color: #000; }
