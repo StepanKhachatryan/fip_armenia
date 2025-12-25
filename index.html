@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hy">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +12,53 @@
 </head>
 <body>
 
+    <header id="main-header">
+        <div class="header-left">
+            <img src="assets/icons/logo.png" alt="GeoGeeks Logo" class="logo">
+            <h1 class="platform-title">Հայաստանի Հանրապետությունում դիտված ջրհեղեղների տեղեկատվական հարթակ</h1>
+        </div>
+        
+        <div class="header-right">
+            <a href="#" target="_blank" class="btn btn-submit">Submit Video</a>
+            
+            <a href="#" class="btn btn-donate">Donate</a>
+            
+            <button id="btn-more-info" class="btn btn-info">More Info</button>
+        </div>
+    </header>
+
     <div id="map"></div>
 
     <div id="controls">
         <div id="date-label">Loading dates...</div>
         <div id="slider"></div>
+    </div>
+
+    <div id="video-sidebar">
+        <button id="close-sidebar" onclick="closeSidebar()">×</button>
+        <div id="sidebar-content">
+            </div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>About This Platform</h2>
+            <p>
+                Welcome to the <b>Flood Information Platform of Armenia</b>. 
+                This citizen-science initiative allows users to visualize historical flood data 
+                verified by geolocation and video evidence.
+            </p>
+            <h3>How it Works</h3>
+            <ul>
+                <li><b>View:</b> Browse the map to see flood events.</li>
+                <li><b>Filter:</b> Use the time slider below to filter by date.</li>
+                <li><b>Contribute:</b> Have a video of a flood? Click "Submit Video" to share it.</li>
+            </ul>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+                Developed by <b>GeoGeeks LLC</b>.
+            </p>
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
