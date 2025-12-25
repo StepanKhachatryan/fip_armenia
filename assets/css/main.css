@@ -11,27 +11,31 @@ body {
     z-index: 1;
 }
 
-/* Floating Control Panel at the bottom */
+/* Full Width, Transparent Control Bar */
 #controls {
     position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    z-index: 1000; /* Must be higher than map */
+    bottom: 30px;
+    left: 0;             /* Start from the very left edge */
+    width: 100%;         /* Span the whole screen */
+    padding: 0 50px;     /* Add padding so the slider handles don't touch the screen edges */
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    
+    background: transparent; /* No background color */
+    box-shadow: none;        /* Remove the shadow box */
+    
+    z-index: 1000;
     text-align: center;
 }
 
+/* Update the text label to be readable on any map color */
 #date-label {
     margin-bottom: 15px;
     font-weight: bold;
-    color: #333;
-    font-size: 1.1em;
+    color: #333; /* Dark text */
+    font-size: 1.2em;
+    /* White glow around text so it is readable on dark map areas */
+    text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+                 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
 }
 
 /* Popup Styling */
