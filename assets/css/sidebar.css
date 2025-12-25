@@ -1,0 +1,74 @@
+/* =========================================
+   SIDEBAR STYLES (Pop-up for Map Points)
+   ========================================= */
+
+#video-sidebar {
+    position: fixed;
+    top: 0;
+    right: -40%; /* Hidden initially */
+    width: 35%;  
+    height: 100vh;
+    background-color: #1a1a1a; /* Dark Background */
+    color: #ffffff;            
+    z-index: 2000;             
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    transition: right 0.3s ease-in-out; 
+    padding: 20px;
+    padding-top: 100px; /* Space for the header */
+    box-sizing: border-box;
+    overflow-y: auto; 
+    font-family: 'Noto Sans Armenian', sans-serif;
+}
+
+#video-sidebar.active {
+    right: 0;
+}
+
+#close-sidebar {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.sidebar-title {
+    font-weight: 700;
+    color: #4db8ff;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.sidebar-date {
+    font-size: 14px;
+    color: #bbbbbb;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* Video Container Styling (Ensures stacked videos look good) */
+.sidebar-video-container {
+    margin-bottom: 20px;
+}
+
+.sidebar-video-container iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    background: #000;
+}
+
+.sidebar-description {
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 14px;
+}
