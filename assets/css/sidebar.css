@@ -1,46 +1,65 @@
 /* =========================================
-   SIDEBAR STYLES (Pop-up for Map Points)
+   SIDEBAR STYLES (Floating Widget)
    ========================================= */
 
 #video-sidebar {
     position: fixed;
-    top: 0;
-    right: -40%; /* Hidden initially */
-    width: 35%;  
-    height: 100vh;
+    
+    /* 1. Vertical Positioning: Floating between Header and Slider */
+    top: 110px;           /* Clears the Header (20px gap + 70px height + 20px gap) */
+    bottom: 120px;        /* Clears the Slider controls at the bottom */
+    
+    /* 2. Horizontal Positioning & Size */
+    width: 35%;           /* Desktop: Occupies right 35% */
+    min-width: 320px;     /* Prevents it from getting too skinny */
+    
+    /* 3. Hidden State (Off-screen to the right) */
+    right: -100vw;        /* Push fully off-screen */
+    
+    /* 4. Styling */
     background-color: #1a1a1a; /* Dark Background */
     color: #ffffff;            
     z-index: 2000;             
-    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-    transition: right 0.3s ease-in-out; 
+    box-shadow: -5px 5px 20px rgba(0,0,0,0.5);
+    border-radius: 15px;       /* Rounded corners to match Header */
+    
+    /* 5. Animation */
+    transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth slide effect */
+    
+    /* 6. Content Layout */
     padding: 20px;
-    padding-top: 100px; /* Space for the header */
     box-sizing: border-box;
-    overflow-y: auto; 
+    overflow-y: auto;     /* Scroll if content is too tall */
     font-family: 'Noto Sans Armenian', sans-serif;
 }
 
+/* Active State: Slides in to align with Header margin */
 #video-sidebar.active {
-    right: 0;
+    right: 20px; 
 }
 
+/* Close Button */
 #close-sidebar {
     position: absolute;
-    top: 25px;
-    right: 25px;
+    top: 15px;
+    right: 15px;
     background: none;
     border: none;
-    color: #fff;
-    font-size: 30px;
+    color: #bbb;
+    font-size: 28px;
     cursor: pointer;
     line-height: 1;
+    transition: color 0.2s;
 }
+#close-sidebar:hover { color: #fff; }
 
+/* Content Styles */
 .sidebar-title {
     font-weight: 700;
     color: #4db8ff;
     margin-bottom: 5px;
     font-size: 20px;
+    padding-right: 30px; /* Space for close button */
 }
 
 .sidebar-date {
@@ -52,7 +71,6 @@
     margin-bottom: 20px;
 }
 
-/* Video Container Styling (Ensures stacked videos look good) */
 .sidebar-video-container {
     margin-bottom: 20px;
 }
@@ -71,4 +89,33 @@
     line-height: 1.6;
     color: #e0e0e0;
     font-size: 14px;
+}
+
+/* =========================================
+   RESPONSIVE LAYOUT (Mobile & Tablet)
+   ========================================= */
+
+/* Tablet: Make it a bit wider so videos are larger */
+@media (max-width: 1024px) {
+    #video-sidebar {
+        width: 45%;
+    }
+}
+
+/* Mobile: Full width card (floating with margins) */
+@media (max-width: 768px) {
+    #video-sidebar {
+        width: auto;      /* Let it calculate based on left/right */
+        left: 20px;       /* Margin from left */
+        right: -150%;     /* Hidden State: Far off to the right */
+        
+        /* Adjust vertical space for smaller screens if needed */
+        top: 100px;
+        bottom: 110px;
+    }
+    
+    #video-sidebar.active {
+        right: 20px;      /* Active State: Margin from right */
+        /* Result: It floats 20px from all sides except top/bottom gaps */
+    }
 }
