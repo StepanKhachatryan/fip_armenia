@@ -6,9 +6,9 @@ var floodIcon = L.icon({
     iconUrl: 'assets/icons/flood_marker.png',
     
     // UPDATED: Smaller size values
-    iconSize:     [24, 24], // Adjusted to be much smaller
-    iconAnchor:   [12, 24], // Half width, full height to anchor at bottom center
-    popupAnchor:  [0, -24]  // Popup opens just above the icon
+    iconSize:     [24, 24], 
+    iconAnchor:   [12, 24], 
+    popupAnchor:  [0, -24]  
 });
 
 function initMap() {
@@ -46,13 +46,29 @@ function openSidebar(item) {
     var sidebar = document.getElementById('video-sidebar');
     var contentDiv = document.getElementById('sidebar-content');
 
+    // --- NEW LOGIC: Loop through multiple videos ---
+    var videoHtmlBlock = '';
+    
+    // Check if the 'videos' array exists and has items
+    if (item.videos && item.videos.length > 0) {
+        item.videos.forEach(function(url) {
+            videoHtmlBlock += `
+                <div class="sidebar-video-container" style="margin-bottom: 20px;">
+                    <iframe src="${url}" allowfullscreen></iframe>
+                </div>
+            `;
+        });
+    } else {
+        // Fallback if no video is found
+        videoHtmlBlock = '<p>No videos available for this event.</p>';
+    }
+
+    // Inject the content
     contentDiv.innerHTML = `
         <div class="sidebar-title">${item.title}</div>
         <span class="sidebar-date">📅 ${item.date}</span>
-        <div class="sidebar-video-container">
-            <iframe src="${item.video_url}" allowfullscreen></iframe>
-        </div>
-        <p class="sidebar-description">${item.description}</p>
+        
+        ${videoHtmlBlock} <p class="sidebar-description">${item.description}</p>
     `;
 
     sidebar.classList.add('active');
