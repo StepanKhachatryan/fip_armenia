@@ -5,8 +5,11 @@
     "lng": 44.4921,
     "date": "2024-05-26",
     "title": "Debed River Overflow (Lori)",
-    "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "description": "Water level rose significantly near the bridge."
+    "videos": [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "https://www.youtube.com/embed/dQw4w9WgXcQ" 
+    ],
+    "description": "Water level rose significantly near the bridge. We have multiple angles of this event."
   },
   {
     "id": 2,
@@ -14,7 +17,9 @@
     "lng": 44.5152,
     "date": "2023-08-15",
     "title": "Yerevan Street Flood",
-    "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "videos": [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ"
+    ],
     "description": "Heavy rain caused traffic jam on Abovyan street."
   },
   {
@@ -23,7 +28,9 @@
     "lng": 46.5000,
     "date": "2025-03-10",
     "title": "Syunik Snow Melt",
-    "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "videos": [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ"
+    ],
     "description": "Minor flooding due to rapid snow melt."
   }
 ]
