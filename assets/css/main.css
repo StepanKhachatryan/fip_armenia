@@ -1,4 +1,25 @@
-/* --- Header Styles --- */
+/* =========================================
+   1. BASE LAYOUT
+   ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevents scrollbars on the main page */
+}
+
+/* Make map take full screen */
+#map {
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+    /* Push map content down slightly so top controls aren't hidden by header */
+    /* Note: Leaflet handles this usually, but padding helps visual balance */
+}
+
+/* =========================================
+   2. HEADER (Top Bar)
+   ========================================= */
 #main-header {
     position: absolute; /* Floats over the map */
     top: 0;
@@ -7,12 +28,12 @@
     height: 70px; /* Fixed height */
     background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Space between Logo and Buttons */
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 1500; /* Above the map (z-index 1) but below Sidebar (z-index 2000) */
+    z-index: 1500; /* Above Map (1) and Controls (1000), but below Sidebar (2000) */
 }
 
 /* Logo & Title Area */
@@ -28,7 +49,7 @@
 }
 
 .platform-title {
-    font-size: 18px; /* Armenian text can be long, keep it readable */
+    font-size: 18px; 
     color: #333;
     margin: 0;
     font-weight: bold;
@@ -53,197 +74,142 @@
     transition: all 0.2s;
     border: none;
     font-family: Arial, sans-serif;
+    display: inline-block;
 }
 
-/* Specific Colors */
+/* Specific Button Colors */
 .btn-submit {
-    background-color: #d32f2f; /* Red for Action */
+    background-color: #d32f2f; /* Red */
     color: white;
 }
 .btn-submit:hover { background-color: #b71c1c; }
 
 .btn-donate {
-    background-color: #fbc02d; /* Gold/Yellow for Money */
+    background-color: #fbc02d; /* Yellow/Gold */
     color: #333;
 }
 .btn-donate:hover { background-color: #f9a825; }
 
 .btn-info {
-    background-color: #1976d2; /* Blue for Info */
+    background-color: #1976d2; /* Blue */
     color: white;
 }
 .btn-info:hover { background-color: #1565c0; }
 
-/* --- "More Info" Modal Styles --- */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; 
-    z-index: 3000; /* Highest priority */
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    background-color: rgba(0,0,0,0.6); /* Black overlay */
-}
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 10% from top, centered horizontally */
-    padding: 30px;
-    border-radius: 8px;
-    width: 50%;
-    max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative;
-}
-
-.close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-modal:hover {
-    color: black;
-}
-
-
-/* --- 1. Base Layout --- */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden; /* Prevents scrollbars on the main page */
-}
-
-/* Make map take full screen */
-#map {
-    height: 100vh;
-    width: 100%;
-    z-index: 1;
-}
-
-/* --- 2. Floating Controls (The Slider Area) --- */
+/* =========================================
+   3. FLOATING CONTROLS (Bottom Slider)
+   ========================================= */
 #controls {
     position: absolute;
     bottom: 30px;
-    left: 0;             /* Start from the very left edge */
-    width: 100%;         /* Span the whole screen */
-    padding: 0 50px;     /* Add padding so handles don't touch screen edges */
-    box-sizing: border-box; /* Includes padding in width calculation */
+    left: 0;             
+    width: 100%;         
+    padding: 0 50px;     
+    box-sizing: border-box; 
     
-    background: transparent; /* No background color */
-    box-shadow: none;        /* No shadow box */
+    background: transparent; 
+    box-shadow: none;        
     
-    z-index: 1000;       /* Sit on top of map */
+    z-index: 1000;       
     text-align: center;
 }
 
-/* The "Date Range" Text Label */
 #date-label {
     margin-bottom: 20px;
     font-weight: bold;
     color: #333; 
     font-size: 1.2em;
-    /* White glow around text so it is readable on dark map areas */
+    /* White glow for readability */
     text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
                  1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
 }
 
-/* --- 3. Slider Customization (noUiSlider) --- */
 
-/* The Track (Background Line) */
+/* =========================================
+   4. SLIDER STYLING (noUiSlider Overrides)
+   ========================================= */
+
+/* The Track */
 .noUi-target {
     border: none;
-    background: #e0e0e0; /* Light grey background */
+    background: #e0e0e0; 
     box-shadow: none;
-    height: 8px;        /* Thinner track */
+    height: 8px;        
     border-radius: 4px;
 }
 
-/* The Connect Bar (The Blue selected range) */
+/* The Connect Bar (Selection) */
 .noUi-connect {
     background: #2c3e50; /* Dark Blue */
 }
 
-/* The Handles (The dragging buttons) */
+/* The Handles */
 .noUi-handle {
     height: 20px;
     width: 20px;
-    top: -6px;          /* Vertically align to track */
-    border-radius: 50%; /* Circle shape */
-    background: #fff;   /* White center */
-    border: 2px solid #2c3e50; /* Blue border */
+    top: -6px;          
+    border-radius: 50%; 
+    background: #fff;   
+    border: 2px solid #2c3e50; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     cursor: grab;
 }
+.noUi-handle:before, .noUi-handle:after { display: none; }
 
-/* Hide the default lines inside the handle */
-.noUi-handle:before, .noUi-handle:after {
-    display: none;
-}
-
-/* --- 4. Slider Ticks (The Years & Months) --- */
-
-/* Container for pips */
+/* The Ticks/Pips */
 .noUi-pips-horizontal {
     padding: 10px 0;
     height: 50px;
-    font-size: 11px; /* Smaller text for years */
+    font-size: 11px;
 }
 
-/* Generic Marker (Line) Style */
 .noUi-marker-horizontal.noUi-marker {
     width: 1px;
-    background: #bbb; /* Light grey for months */
+    background: #bbb; 
 }
 
-/* Small Lines (Months) */
-.noUi-marker-horizontal.noUi-marker-normal {
-    height: 8px;
-}
+.noUi-marker-horizontal.noUi-marker-normal { height: 8px; }
 
-/* Bold Lines (Years) */
 .noUi-marker-horizontal.noUi-marker-large {
     height: 15px;
-    width: 2px;       /* Thicker line */
-    background: #333; /* Dark/Bold color */
+    width: 2px;       
+    background: #333; 
 }
 
-/* Text Labels (The Year Numbers) */
 .noUi-value-horizontal {
     font-size: 12px;
     color: #333;
     margin-top: 5px;
     font-weight: bold;
-    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff; /* Readability */
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
 }
 
-/* --- 5. Sidebar Styling (The "Lights Off" Panel) --- */
+
+/* =========================================
+   5. SIDEBAR (Video Panel)
+   ========================================= */
 #video-sidebar {
     position: fixed;
     top: 0;
-    right: -40%; /* Hidden off-screen initially */
-    width: 35%;  /* Your requested width */
+    right: -40%; /* Hidden initially */
+    width: 35%;  
     height: 100vh;
-    background-color: #1a1a1a; /* Dark background */
-    color: #ffffff;            /* White text */
-    z-index: 2000;             /* Sit on top of map and controls */
+    background-color: #1a1a1a; /* Dark Mode */
+    color: #ffffff;            
+    z-index: 2000;             /* Higher than Header (1500) */
     box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-    transition: right 0.3s ease-in-out; /* Smooth slide animation */
+    transition: right 0.3s ease-in-out; 
     padding: 20px;
+    padding-top: 80px; /* Extra padding top so text doesn't hide behind 'X' */
     box-sizing: border-box;
-    overflow-y: auto; /* Scroll if description is long */
+    overflow-y: auto; 
 }
 
-/* When this class is added via JS, the sidebar slides in */
 #video-sidebar.active {
     right: 0;
 }
 
-/* Close Button (X) */
 #close-sidebar {
     position: absolute;
     top: 15px;
@@ -255,23 +221,18 @@ body {
     cursor: pointer;
     line-height: 1;
 }
+#close-sidebar:hover { color: #ff4444; }
 
-#close-sidebar:hover {
-    color: #ff4444;
-}
-
-/* Sidebar Content Styling */
 .sidebar-title {
-    margin-top: 40px; /* Space for close button */
     font-size: 24px;
     font-weight: bold;
-    color: #4db8ff; /* Light blue accent */
+    color: #4db8ff; 
     margin-bottom: 5px;
 }
 
 .sidebar-date {
     font-size: 14px;
-    color: #bbbbbb; /* Grey text */
+    color: #bbbbbb; 
     margin-bottom: 20px;
     border-bottom: 1px solid #444;
     padding-bottom: 15px;
@@ -280,7 +241,7 @@ body {
 
 .sidebar-video-container iframe {
     width: 100%;
-    aspect-ratio: 16 / 9; /* Perfect video shape */
+    aspect-ratio: 16 / 9; 
     border: none;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
@@ -293,3 +254,44 @@ body {
     color: #e0e0e0;
     font-size: 14px;
 }
+
+
+/* =========================================
+   6. MODAL (More Info Popup)
+   ========================================= */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; 
+    z-index: 3000; /* Highest priority: Top of everything */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.6); /* Dim background */
+    backdrop-filter: blur(3px); /* Optional: Blur effect */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from top, centered horizontally */
+    padding: 30px;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-modal:hover { color: black; }
+
+.modal-content h2 { margin-top: 0; color: #333; }
+.modal-content p { color: #555; line-height: 1.6; }
+.modal-content ul { color: #555; line-height: 1.6; }
