@@ -4,7 +4,6 @@
 body {
     margin: 0;
     padding: 0;
-    /* Updated Font Family to Noto Sans Armenian */
     font-family: 'Noto Sans Armenian', Arial, sans-serif;
     overflow: hidden; 
 }
@@ -59,7 +58,7 @@ body {
     font-size: 18px; 
     color: #333;
     margin: 0;
-    font-weight: 700; /* Bold */
+    font-weight: 700; 
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -78,7 +77,7 @@ body {
     text-decoration: none;
     font-size: 14px;
     border-radius: 8px;
-    font-weight: 700; /* Bold */
+    font-weight: 700; 
     cursor: pointer;
     transition: all 0.2s;
     border: none;
@@ -111,40 +110,36 @@ body {
 
 #date-label { display: none; }
 
-/* --- SLIDER VISUALS (Updated to your colors) --- */
-
-/* The Track (Unselected Grey) */
+/* --- SLIDER VISUALS --- */
 .noUi-target {
     border: none;
-    background: #e9ecef; /* Light Grey from image */
+    background: #e9ecef; 
     box-shadow: none;
     height: 8px;         
     border-radius: 4px;
     margin-bottom: 25px; 
 }
 
-/* The Connect Bar (Selected Blue) */
 .noUi-connect {
-    background: #2a6395; /* The Specific Blue from your image */
+    background: #2a6395; 
 }
 
-/* The Handles (Smaller Squares) */
 .noUi-handle {
-    height: 14px;       /* Smaller height */
-    width: 14px;        /* Smaller width (Square) */
-    top: -3px;          /* Center it on the track */
-    border-radius: 3px; /* Slightly rounded square */
+    height: 14px;       
+    width: 14px;        
+    top: -3px;          
+    border-radius: 3px; 
     background: #fff;   
-    border: 1px solid #ced4da; /* Subtle grey border */
+    border: 1px solid #ced4da; 
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     cursor: grab;
 }
 .noUi-handle:before, .noUi-handle:after { display: none; }
 
-/* Tooltips (Floating Dates) */
+/* Tooltips */
 .noUi-tooltip {
     display: block;
-    background: #2d353c; /* Dark Charcoal from image */
+    background: #2d353c; 
     color: #fff;         
     border-radius: 4px;
     border: none;
@@ -155,7 +150,7 @@ body {
     margin-bottom: 5px; 
 }
 
-/* Pips (Year Labels) */
+/* Pips */
 .noUi-pips-horizontal {
     padding: 12px 0;
     height: 40px;
@@ -211,7 +206,7 @@ body {
 .sidebar-title { font-weight: 700; color: #4db8ff; margin-bottom: 5px; font-size: 20px;}
 .sidebar-date { font-size: 14px; color: #bbbbbb; border-bottom: 1px solid #444; padding-bottom: 15px; display: block; margin-bottom: 20px;}
 
-/* Modal */
+/* --- MODAL (UPDATED FOR TRANSPARENCY) --- */
 .modal {
     display: none; 
     position: fixed; 
@@ -220,22 +215,31 @@ body {
     top: 0;
     width: 100%; 
     height: 100%; 
-    background-color: rgba(0,0,0,0.6); 
-    backdrop-filter: blur(3px); 
+    /* The dark overlay behind the modal */
+    background-color: rgba(0,0,0,0.5); 
     font-family: 'Noto Sans Armenian', sans-serif;
 }
+
 .modal-content {
-    background-color: #fefefe;
+    /* UPDATED: 60% Opacity White = 40% Transparent */
+    background-color: rgba(255, 255, 255, 0.6); 
+    
+    /* UPDATED: Blur Effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
     margin: 10% auto; 
     padding: 30px;
-    border-radius: 8px;
+    border-radius: 15px; /* Softer corners */
     width: 50%;
     max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     position: relative;
+    color: #000; /* Ensure text is black for readability */
 }
+
 .close-modal {
-    color: #aaa;
+    color: #333;
     float: right;
     font-size: 28px;
     font-weight: bold;
