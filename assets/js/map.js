@@ -2,13 +2,13 @@ var map;
 var markersLayer = new L.LayerGroup();
 
 // --- 1. Define Custom Icon ---
-// Make sure you save your image as 'flood_marker.png' in the icons folder
 var floodIcon = L.icon({
     iconUrl: 'assets/icons/flood_marker.png',
     
-    iconSize:     [40, 40], // size of the icon (adjust if your image is different)
-    iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -40]  // point from which the popup should open relative to the iconAnchor
+    // UPDATED: Smaller size values
+    iconSize:     [24, 24], // Adjusted to be much smaller
+    iconAnchor:   [12, 24], // Half width, full height to anchor at bottom center
+    popupAnchor:  [0, -24]  // Popup opens just above the icon
 });
 
 function initMap() {
@@ -31,7 +31,6 @@ function updateMarkers(data) {
     markersLayer.clearLayers();
 
     data.forEach(function(item) {
-        // --- 2. Use Custom Icon Here ---
         var marker = L.marker([item.lat, item.lng], { icon: floodIcon });
         
         marker.on('click', function() {
