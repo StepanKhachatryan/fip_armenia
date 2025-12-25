@@ -1,93 +1,302 @@
 /* =========================================
+   1. BASE LAYOUT
+   ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevents scrollbars on the main page */
+}
+
+/* Make map take full screen */
+#map {
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+}
+
+/* --- LEAFLET CONTROL OVERRIDES (Moving Zoom Buttons) --- */
+/* Move the Zoom Buttons (+/-) down so they don't hide behind the header */
+.leaflet-top {
+    top: 100px; /* Header is ~70px + 20px margin, so 100px is safe */
+}
+
+
+/* =========================================
+   2. HEADER (Floating Glass Bar)
+   ========================================= */
+#main-header {
+    position: absolute; /* Floats over the map */
+    top: 20px;          /* Space from top */
+    left: 20px;         /* Space from left */
+    right: 20px;        /* Space from right */
+    height: 70px;       /* Fixed height */
+    
+    /* 30% Transparency (0.7 Opacity) + Blur Effect */
+    background: rgba(255, 255, 255, 0.7); 
+    backdrop-filter: blur(10px);          /* The "Frosted Glass" effect */
+    -webkit-backdrop-filter: blur(10px);  /* Safari support */
+    
+    border-radius: 15px; /* Rounded corners */
+    
+    display: flex;
+    justify-content: space-between; /* Space between Logo and Buttons */
+    align-items: center;
+    padding: 0 25px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Soft shadow */
+    z-index: 1500; 
+}
+
+/* Logo & Title Area */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1; /* Allow this section to grow */
+    overflow: hidden; /* Prevent text overflow */
+}
+
+.logo {
+    height: 40px; /* FIXED: Logo is now much smaller */
+    width: auto;
+    object-fit: contain;
+}
+
+.platform-title {
+    font-size: 18px; 
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap; /* Force one line */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add "..." if screen is too small */
+    line-height: 1.2;
+}
+
+/* Header Buttons Area */
+.header-right {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; /* Prevent buttons from squishing */
+}
+
+/* General Button Styles */
+.btn {
+    padding: 10px 20px; /* Slightly larger clickable area */
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 8px; /* Softer edges */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: Arial, sans-serif;
+    display: inline-block;
+    color: white; /* Default text color */
+}
+.btn:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Specific Button Colors (Your requested hex codes) */
+.btn-submit {
+    background-color: #00a97a; /* Greenish */
+    color: white;
+}
+.btn-donate {
+    background-color: #f7db5d; /* Yellow */
+    color: #333; /* Dark text for contrast on yellow */
+}
+.btn-info {
+    background-color: #0c8495; /* Teal */
+    color: white;
+}
+
+
+/* =========================================
    3. FLOATING CONTROLS (Bottom Slider)
    ========================================= */
 #controls {
     position: absolute;
-    bottom: 40px;        /* Moved up slightly */
+    bottom: 40px;        
     left: 0;             
     width: 100%;         
-    padding: 0 60px;     /* Extra padding to prevent tooltips from getting cut off */
+    padding: 0 60px;     
     box-sizing: border-box; 
     background: transparent; 
     box-shadow: none;        
     z-index: 1000;       
 }
 
-/* HIDE the old text label since we now use tooltips */
-#date-label {
-    display: none; 
-}
+#date-label { display: none; }
+
 
 /* =========================================
    4. SLIDER STYLING (noUiSlider Overrides)
    ========================================= */
 
-/* The Track (The Unselected / Background Line) */
+/* The Track */
 .noUi-target {
     border: none;
-    background: #b3d9ff; /* Light Blue (Unselected Area) */
+    background: #b3d9ff; 
     box-shadow: none;
-    height: 6px;         /* Slightly thinner for elegance */
+    height: 6px;         
     border-radius: 3px;
-    margin-bottom: 25px; /* Pushes the Year Labels down so they are visible */
+    margin-bottom: 25px; 
 }
 
-/* The Connect Bar (The Selected Range) */
+/* The Connect Bar (Selection) */
 .noUi-connect {
-    background: #004d99; /* Dark Blue (Selected Area) */
+    background: #004d99; 
 }
 
-/* The Handles (The Squares) */
+/* The Handles */
 .noUi-handle {
     height: 18px;
     width: 18px;
     top: -6px;          
-    border-radius: 3px; /* Small square with slightly rounded corners */
-    background: #fff;   /* White fill */
-    border: 3px solid #004d99; /* Dark Blue edges */
+    border-radius: 3px; 
+    background: #fff;   
+    border: 3px solid #004d99; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     cursor: grab;
 }
-/* Hide default handle lines */
 .noUi-handle:before, .noUi-handle:after { display: none; }
 
-/* --- TOOLTIPS (The Date Boxes above handles) --- */
+/* Tooltips */
 .noUi-tooltip {
     display: block;
-    background: #004d99; /* Dark Blue Fill */
-    color: #fff;         /* White Text */
+    background: #004d99; 
+    color: #fff;         
     border-radius: 4px;
     border: none;
     padding: 5px 10px;
     font-size: 12px;
     font-weight: bold;
-    /* Arrow pointing down */
     margin-bottom: 5px; 
 }
 
-/* --- The Ticks/Pips (Year Labels) --- */
+/* The Ticks/Pips */
 .noUi-pips-horizontal {
     padding: 12px 0;
     height: 40px;
     font-size: 12px;
     color: #333;
 }
-
-/* The small lines */
-.noUi-marker-horizontal.noUi-marker {
-    width: 1px;
-    background: #999; 
-}
-
-/* Hide most markers, we only want the edge years mostly */
+.noUi-marker-horizontal.noUi-marker { width: 1px; background: #999; }
 .noUi-marker-horizontal.noUi-marker-normal { display: none; }
 .noUi-marker-horizontal.noUi-marker-large { height: 10px; background: #333; }
-
-/* The Year Text */
 .noUi-value-horizontal {
     font-size: 14px;
     color: #000;
     font-weight: bold;
     margin-top: 5px;
-    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff; /* White outline for readability */
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
 }
+
+
+/* =========================================
+   5. SIDEBAR (Video Panel)
+   ========================================= */
+#video-sidebar {
+    position: fixed;
+    top: 0;
+    right: -40%; 
+    width: 35%;  
+    height: 100vh;
+    background-color: #1a1a1a; 
+    color: #ffffff;            
+    z-index: 2000;             
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    transition: right 0.3s ease-in-out; 
+    padding: 20px;
+    padding-top: 100px; /* Increased padding so content clears the header if overlapping */
+    box-sizing: border-box;
+    overflow-y: auto; 
+}
+
+#video-sidebar.active { right: 0; }
+
+#close-sidebar {
+    position: absolute;
+    top: 25px; /* Adjusted for new layout */
+    right: 25px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+#close-sidebar:hover { color: #ff4444; }
+
+.sidebar-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4db8ff; 
+    margin-bottom: 5px;
+}
+.sidebar-date {
+    font-size: 14px;
+    color: #bbbbbb; 
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    display: block;
+}
+.sidebar-video-container iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    background: #000;
+}
+.sidebar-description {
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   6. MODAL (More Info Popup)
+   ========================================= */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 3000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(3px); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; 
+    padding: 30px;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-modal:hover { color: black; }
+
+.modal-content h2 { margin-top: 0; color: #333; }
+.modal-content p, .modal-content ul { color: #555; line-height: 1.6; }
