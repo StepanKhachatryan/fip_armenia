@@ -124,14 +124,15 @@ body {
     background: #2a6395; 
 }
 
+/* The Handles (Smaller, Centered Rectangles) */
 .noUi-handle {
-    height: 14px;       
-    width: 14px;        
-    top: -3px;          
-    border-radius: 3px; 
-    background: #fff;   
-    border: 1px solid #ced4da; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    height: 13px;       /* Reduced to 70% of previous size */
+    width: 9px;         /* Reduced to half width */
+    top: -3px;          /* Centered vertically on the 8px track */
+    border-radius: 3px; /* Slightly rounded corners */
+    background: #fff;   /* White fill */
+    border: 3px solid #004d99; /* Dark Blue edges */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     cursor: grab;
 }
 .noUi-handle:before, .noUi-handle:after { display: none; }
