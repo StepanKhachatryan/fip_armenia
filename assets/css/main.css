@@ -1,7 +1,9 @@
+/* --- 1. Base Layout --- */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevents scrollbars on the main page */
 }
 
 /* Make map take full screen */
@@ -11,73 +13,171 @@ body {
     z-index: 1;
 }
 
-/* Full Width, Transparent Control Bar */
+/* --- 2. Floating Controls (The Slider Area) --- */
 #controls {
     position: absolute;
     bottom: 30px;
     left: 0;             /* Start from the very left edge */
     width: 100%;         /* Span the whole screen */
-    padding: 0 50px;     /* Add padding so the slider handles don't touch the screen edges */
-    box-sizing: border-box; /* Ensures padding is included in width calculation */
+    padding: 0 50px;     /* Add padding so handles don't touch screen edges */
+    box-sizing: border-box; /* Includes padding in width calculation */
     
     background: transparent; /* No background color */
-    box-shadow: none;        /* Remove the shadow box */
+    box-shadow: none;        /* No shadow box */
     
-    z-index: 1000;
+    z-index: 1000;       /* Sit on top of map */
     text-align: center;
 }
 
-/* Update the text label to be readable on any map color */
+/* The "Date Range" Text Label */
 #date-label {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     font-weight: bold;
-    color: #333; /* Dark text */
+    color: #333; 
     font-size: 1.2em;
     /* White glow around text so it is readable on dark map areas */
     text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
                  1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
 }
 
-/* Popup Styling */
-.video-popup {
-    min-width: 200px;
-}
-.video-popup iframe {
-    width: 100%;
-    height: 150px;
-    border-radius: 6px;
-    margin: 10px 0;
-}
-.video-popup h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #0078A8;
-}
-.video-popup p {
-    font-size: 12px;
-    color: #555;
-}
+/* --- 3. Slider Customization (noUiSlider) --- */
 
-/* Customize the slider bar to look modern */
+/* The Track (Background Line) */
 .noUi-target {
     border: none;
+    background: #e0e0e0; /* Light grey background */
     box-shadow: none;
-    background: rgba(255, 255, 255, 0.5); /* Semi-transparent white track */
-    height: 10px;
+    height: 8px;        /* Thinner track */
+    border-radius: 4px;
 }
 
+/* The Connect Bar (The Blue selected range) */
 .noUi-connect {
-    background: #0078A8; /* The color of the selected range (Blue) */
+    background: #2c3e50; /* Dark Blue */
 }
 
+/* The Handles (The dragging buttons) */
 .noUi-handle {
-    border-radius: 50%;
-    background: #0078A8;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    height: 20px;
+    width: 20px;
+    top: -6px;          /* Vertically align to track */
+    border-radius: 50%; /* Circle shape */
+    background: #fff;   /* White center */
+    border: 2px solid #2c3e50; /* Blue border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     cursor: grab;
 }
 
-/* Remove the little lines inside the handle */
+/* Hide the default lines inside the handle */
 .noUi-handle:before, .noUi-handle:after {
     display: none;
+}
+
+/* --- 4. Slider Ticks (The Years & Months) --- */
+
+/* Container for pips */
+.noUi-pips-horizontal {
+    padding: 10px 0;
+    height: 50px;
+    font-size: 11px; /* Smaller text for years */
+}
+
+/* Generic Marker (Line) Style */
+.noUi-marker-horizontal.noUi-marker {
+    width: 1px;
+    background: #bbb; /* Light grey for months */
+}
+
+/* Small Lines (Months) */
+.noUi-marker-horizontal.noUi-marker-normal {
+    height: 8px;
+}
+
+/* Bold Lines (Years) */
+.noUi-marker-horizontal.noUi-marker-large {
+    height: 15px;
+    width: 2px;       /* Thicker line */
+    background: #333; /* Dark/Bold color */
+}
+
+/* Text Labels (The Year Numbers) */
+.noUi-value-horizontal {
+    font-size: 12px;
+    color: #333;
+    margin-top: 5px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff; /* Readability */
+}
+
+/* --- 5. Sidebar Styling (The "Lights Off" Panel) --- */
+#video-sidebar {
+    position: fixed;
+    top: 0;
+    right: -40%; /* Hidden off-screen initially */
+    width: 35%;  /* Your requested width */
+    height: 100vh;
+    background-color: #1a1a1a; /* Dark background */
+    color: #ffffff;            /* White text */
+    z-index: 2000;             /* Sit on top of map and controls */
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    transition: right 0.3s ease-in-out; /* Smooth slide animation */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Scroll if description is long */
+}
+
+/* When this class is added via JS, the sidebar slides in */
+#video-sidebar.active {
+    right: 0;
+}
+
+/* Close Button (X) */
+#close-sidebar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+#close-sidebar:hover {
+    color: #ff4444;
+}
+
+/* Sidebar Content Styling */
+.sidebar-title {
+    margin-top: 40px; /* Space for close button */
+    font-size: 24px;
+    font-weight: bold;
+    color: #4db8ff; /* Light blue accent */
+    margin-bottom: 5px;
+}
+
+.sidebar-date {
+    font-size: 14px;
+    color: #bbbbbb; /* Grey text */
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 15px;
+    display: block;
+}
+
+.sidebar-video-container iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Perfect video shape */
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    background: #000;
+}
+
+.sidebar-description {
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 14px;
 }
