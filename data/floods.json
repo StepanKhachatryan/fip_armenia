@@ -1,15 +1,14 @@
 [
   {
     "id": 1,
-    "lat": 40.7929,
-    "lng": 44.4921,
+    "lat": 41.099067,
+    "lng": 44.657495,
     "date": "2024-05-26",
-    "title": "Debed River Overflow (Lori)",
+    "title": "Դեբեդ գետի վարարում",
     "videos": [
-      "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      "https://www.youtube.com/embed/dQw4w9WgXcQ" 
-    ],
-    "description": "Water level rose significantly near the bridge. We have multiple angles of this event."
+      "https://www.youtube.com/embed/l_UxZIAzOww?si=PQ0_-fucGlD8Ha0x",
+     ],
+    "description": "Դեբեդ գետի վարարման հետևանքով ջրհեղեղ Լոռու մարզում։ Տեսանյութը ներկայացնում է տարբեր տեղամասեր։"
   },
   {
     "id": 2,
@@ -27,6 +26,17 @@
     "lat": 39.5000,
     "lng": 46.5000,
     "date": "2025-03-10",
+    "title": "Syunik Snow Melt",
+    "videos": [
+      "https://www.youtube.com/embed/dQw4w9WgXcQ"
+    ],
+    "description": "Minor flooding due to rapid snow melt."
+  }
+  {
+    "id": 4,
+    "lat": 40.5000,
+    "lng": 45.5000,
+    "date": "2025-02-10",
     "title": "Syunik Snow Melt",
     "videos": [
       "https://www.youtube.com/embed/dQw4w9WgXcQ"
