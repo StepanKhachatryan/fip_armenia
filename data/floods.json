@@ -40,7 +40,8 @@
     "date": "2025-05-06",
     "title": "Հորդառատ անձրև Երևանում",
     "videos": [
-      "https://www.youtube.com/embed/Q6AdgKCBSDw?si=Xc5saQbZgBI3ajZt"
+      "https://www.youtube.com/embed/Q6AdgKCBSDw?si=Xc5saQbZgBI3ajZt",
+      "https://www.youtube.com/embed/rCowWsV4MXU?si=hEyuAwxR5z0vUcEC"
     ],
     "description": "Հորդառատ անձրև և ջրածածկումներ Երևանի տարբեր թաղամասերում"
   },
@@ -57,17 +58,6 @@
    },
    {
     "id": 6,
-    "lat": 40.190313,
-    "lng": 44.558704,
-    "date": "2025-05-05",
-    "title": "Հորդառատ անձրև Երևանում",
-    "videos": [
-      "https://www.youtube.com/embed/rCowWsV4MXU?si=hEyuAwxR5z0vUcEC"
-    ],
-    "description": "Հորդառատ անձրև և ջրածածկում Երևանում, Նոր Նորք"
-   },
-   {
-    "id": 7,
     "lat": 40.203082,
     "lng": 44.565061,
     "date": "2025-07-25",
