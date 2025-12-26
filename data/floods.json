@@ -31,7 +31,7 @@
       "https://www.youtube.com/embed/dQw4w9WgXcQ"
     ],
     "description": "Minor flooding due to rapid snow melt."
-  }
+  },
   {
     "id": 4,
     "lat": 40.5000,
@@ -42,5 +42,5 @@
       "https://www.youtube.com/embed/dQw4w9WgXcQ"
     ],
     "description": "Minor flooding due to rapid snow melt."
-  }
+   }
 ]
