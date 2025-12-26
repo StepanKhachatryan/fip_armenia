@@ -43,16 +43,27 @@
       "https://www.youtube.com/embed/Q6AdgKCBSDw?si=Xc5saQbZgBI3ajZt"
     ],
     "description": "Հորդառատ անձրև և ջրածածկումներ Երևանում"
-   },
+  },
   {
     "id": 5,
     "lat": 40.174930,
-    "lng":  44.499888,
+    "lng": 44.499888,
     "date": "2025-07-25",
     "title": "Հորդառատ անձրև Երևանում",
     "videos": [
       "https://www.youtube.com/embed/Q6AdgKCBSDw?si=Xc5saQbZgBI3ajZt"
     ],
     "description": "Հորդառատ անձրև և ջրածածկում Հաղթանակի կամրջի վրա"
+   },
+   {
+    "id": 6,
+    "lat": 40.190313,
+    "lng": 44.558704,
+    "date": "2025-05-05",
+    "title": "Հորդառատ անձրև Երևանում",
+    "videos": [
+      "https://www.youtube.com/embed/rCowWsV4MXU?si=hEyuAwxR5z0vUcEC"
+    ],
+    "description": "Հորդառատ անձրև և ջրածածկում Երևանում, Նոր Նորք"
    }
 ]
