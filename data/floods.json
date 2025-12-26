@@ -24,14 +24,14 @@
   },
   {
     "id": 3,
-    "lat": 39.5000,
-    "lng": 46.5000,
-    "date": "2025-03-10",
-    "title": "Syunik Snow Melt",
+    "lat": 40.139434,
+    "lng":  44.437641,
+    "date": "2025-05-06",
+    "title": "Ուժեղ կարկուտ և հեղեղային հոսք Չարբախում",
     "videos": [
-      "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      "https://www.youtube.com/embed/ICyw833vxIQ?si=sXIpqPrN_aB3GXqi"
     ],
-    "description": "Minor flooding due to rapid snow melt."
+    "description": "Երևան քաղաքի Ներքին Չարբախ թաղամասում տեղացել է ուժեղ կարկուտ և առաջացել մակերևութային հոսք"
   },
   {
     "id": 4,
