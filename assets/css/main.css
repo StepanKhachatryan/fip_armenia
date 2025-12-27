@@ -1,4 +1,181 @@
 /* =========================================
+   1. BASE LAYOUT
+   ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans Armenian', Arial, sans-serif;
+    overflow: hidden; 
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+}
+
+/* Move Leaflet Zoom Controls down */
+.leaflet-top {
+    top: 100px; 
+}
+
+/* =========================================
+   2. HEADER (Glassmorphism)
+   ========================================= */
+#main-header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.7); 
+    backdrop-filter: blur(10px);         
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 1500; 
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* --- THIS FIXES YOUR GIANT LOGO --- */
+.logo {
+    height: 40px; 
+    width: auto;
+    object-fit: contain;
+}
+
+.platform-title {
+    font-size: 18px; 
+    color: #333;
+    margin: 0;
+    font-weight: 700; 
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; 
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 8px;
+    font-weight: 700; 
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: inline-block;
+    color: white; 
+    font-family: 'Noto Sans Armenian', sans-serif;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-submit { background-color: #00a97a; color: white; }
+.btn-donate { background-color: #f7db5d; color: #333; }
+.btn-info   { background-color: #0c8495; color: white; }
+
+/* =========================================
+   3. SLIDER CONTROLS
+   ========================================= */
+#controls {
+    position: absolute;
+    bottom: 40px;        
+    left: 0;             
+    width: 100%;         
+    padding: 0 60px;     
+    box-sizing: border-box; 
+    background: transparent; 
+    z-index: 1000;       
+}
+
+#date-label { display: none; }
+
+/* --- SLIDER VISUALS --- */
+.noUi-target {
+    border: none;
+    background: #e9ecef; 
+    box-shadow: none;
+    height: 8px;         
+    border-radius: 4px;
+    margin-bottom: 25px; 
+}
+
+.noUi-connect {
+    background: #2a6395; 
+}
+
+/* The Handles (Smaller, Centered Squares) */
+.noUi-handle {
+    height: 14px !important;     /* Force smaller height */
+    width: 14px !important;      /* Force smaller width (Square) */
+    top: -3px !important;        /* Adjust to center on the 8px track */
+    border-radius: 3px; 
+    background: #fff;   
+    border: 2px solid #004d99;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    cursor: grab;
+}
+
+/* Hide default handle lines */
+.noUi-handle:before, .noUi-handle:after { 
+    display: none !important; 
+}
+
+/* Tooltips */
+.noUi-tooltip {
+    display: block;
+    background: #2d353c; 
+    color: #fff;         
+    border-radius: 4px;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Noto Sans Armenian', sans-serif;
+    margin-bottom: 5px; 
+}
+
+/* Pips */
+.noUi-pips-horizontal {
+    padding: 12px 0;
+    height: 40px;
+    font-size: 12px;
+    color: #333;
+    font-family: 'Noto Sans Armenian', sans-serif;
+}
+.noUi-marker-horizontal.noUi-marker { width: 1px; background: #999; }
+.noUi-marker-horizontal.noUi-marker-normal { display: none; }
+.noUi-marker-horizontal.noUi-marker-large { height: 10px; background: #333; }
+.noUi-value-horizontal {
+    font-size: 14px;
+    color: #000;
+    font-weight: 700;
+    margin-top: 5px;
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
+}
+
+/* =========================================
    4. MODAL STYLES (General & Info Popup)
    ========================================= */
 .modal {
