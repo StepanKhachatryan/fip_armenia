@@ -222,49 +222,58 @@ body {
    5. SUBMIT VIDEO MODAL (Specific Overrides)
    ========================================= */
 
-/* 1. Make the container HUGE (Red Box size) */
+/* 1. Adjusted Size: Tighter Width & Max Height */
 #submit-modal .modal-content {
-    width: 90%;           /* Take up 90% of screen width */
-    max-width: 1200px;    /* Cap it for very large screens */
-    height: 90vh;         /* Take up 90% of screen height */
-    margin: 5vh auto;     /* Center it with 5% margin top/bottom */
-    padding: 20px 0 0 0;  /* Remove side/bottom padding, keep top for 'X' button */
+    /* WIDTH: Adjusted to fit Google Form naturally without huge empty sides */
+    width: 95%;           
+    max-width: 700px;     /* Reduced from 1200px to 700px to match form width */
+    
+    /* HEIGHT: Maximize vertical space */
+    height: 95vh;         /* Occupy 95% of the screen height */
+    margin: 2.5vh auto;   /* Small margins top/bottom to center it */
+    
+    padding: 0;           /* Remove padding to let iframe fill edge-to-edge */
     overflow: hidden;     /* Hide outer scrollbar */
-    display: flex;        /* Use flexbox to stack content */
+    display: flex;        
     flex-direction: column;
+    background: #fff;     /* Ensure background is white to blend with form */
 }
 
-/* 2. Make the container stretch to fill available space */
+/* Close button positioning for this specific modal */
+#submit-modal .close-modal {
+    top: 10px;
+    right: 15px;
+    z-index: 20;          /* Ensure it sits on top of the iframe */
+    background: rgba(255,255,255,0.8); /* Small background to ensure visibility */
+    border-radius: 50%;
+    padding: 0 8px;
+}
+
+/* 2. Container takes up ALL remaining space */
 .google-form-container {
-    flex: 1;              /* Take up all remaining height below the 'X' */
+    flex: 1;              /* Grow to fill the height */
     width: 100%;
+    height: 100%;         /* Explicitly set height */
     position: relative;
-    overflow: hidden;     /* Ensure no double scrollbars */
 }
 
-/* 3. Force the iframe to fill the container completely */
+/* 3. Force iframe to fill the container */
 .google-form-frame {
     position: absolute;
     top: 0;
     left: 0;
-    bottom: 0;
-    right: 0;
     width: 100%;
     height: 100%;
     border: none;
 }
 
-/* Mobile Responsive Adjustments */
+/* Mobile Adjustments */
 @media (max-width: 768px) {
-    .modal-content {
-        width: 85%;
-        margin: 15% auto;
-    }
-
-    /* On mobile, keep the submit modal huge too */
     #submit-modal .modal-content {
-        width: 95%;
-        height: 92vh;
-        margin: 4vh auto;
+        width: 100%;      /* Full width on phone */
+        height: 100%;     /* Full height on phone */
+        margin: 0;        /* No margins on phone */
+        border-radius: 0; /* Square corners on phone */
+        max-width: none;
     }
 }
