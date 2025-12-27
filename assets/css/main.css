@@ -1,185 +1,6 @@
 /* =========================================
-   1. BASE LAYOUT
+   4. MODAL STYLES (General & Info Popup)
    ========================================= */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Noto Sans Armenian', Arial, sans-serif;
-    overflow: hidden; 
-}
-
-#map {
-    height: 100vh;
-    width: 100%;
-    z-index: 1;
-}
-
-/* Move Leaflet Zoom Controls down */
-.leaflet-top {
-    top: 100px; 
-}
-
-/* =========================================
-   2. HEADER (Glassmorphism)
-   ========================================= */
-#main-header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    height: 70px;
-    background: rgba(255, 255, 255, 0.7); 
-    backdrop-filter: blur(10px);         
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    z-index: 1500; 
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-    overflow: hidden;
-}
-
-.logo {
-    height: 40px; 
-    width: auto;
-    object-fit: contain;
-}
-
-.platform-title {
-    font-size: 18px; 
-    color: #333;
-    margin: 0;
-    font-weight: 700; 
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-}
-
-.header-right {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0; 
-}
-
-/* Buttons */
-.btn {
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 14px;
-    border-radius: 8px;
-    font-weight: 700; 
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    display: inline-block;
-    color: white; 
-    font-family: 'Noto Sans Armenian', sans-serif;
-}
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.btn-submit { background-color: #00a97a; color: white; }
-.btn-donate { background-color: #f7db5d; color: #333; }
-.btn-info   { background-color: #0c8495; color: white; }
-
-/* =========================================
-   3. SLIDER CONTROLS
-   ========================================= */
-#controls {
-    position: absolute;
-    bottom: 40px;        
-    left: 0;             
-    width: 100%;         
-    padding: 0 60px;     
-    box-sizing: border-box; 
-    background: transparent; 
-    z-index: 1000;       
-}
-
-#date-label { display: none; }
-
-/* --- SLIDER VISUALS --- */
-.noUi-target {
-    border: none;
-    background: #e9ecef; 
-    box-shadow: none;
-    height: 8px;         
-    border-radius: 4px;
-    margin-bottom: 25px; 
-}
-
-.noUi-connect {
-    background: #2a6395; 
-}
-
-/* The Handles (Smaller, Centered Squares) */
-/* Added !important to force the size change */
-.noUi-handle {
-    height: 14px !important;     /* Force smaller height */
-    width: 14px !important;      /* Force smaller width (Square) */
-    top: -3px !important;        /* Adjust to center on the 8px track */
-    border-radius: 3px; 
-    background: #fff;   
-    border: 2px solid #004d99;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    cursor: grab;
-}
-
-/* Hide default handle lines */
-.noUi-handle:before, .noUi-handle:after { 
-    display: none !important; 
-}
-
-/* Tooltips */
-.noUi-tooltip {
-    display: block;
-    background: #2d353c; 
-    color: #fff;         
-    border-radius: 4px;
-    border: none;
-    padding: 4px 8px;
-    font-size: 12px;
-    font-weight: 700;
-    font-family: 'Noto Sans Armenian', sans-serif;
-    margin-bottom: 5px; 
-}
-
-/* Pips */
-.noUi-pips-horizontal {
-    padding: 12px 0;
-    height: 40px;
-    font-size: 12px;
-    color: #333;
-    font-family: 'Noto Sans Armenian', sans-serif;
-}
-.noUi-marker-horizontal.noUi-marker { width: 1px; background: #999; }
-.noUi-marker-horizontal.noUi-marker-normal { display: none; }
-.noUi-marker-horizontal.noUi-marker-large { height: 10px; background: #333; }
-.noUi-value-horizontal {
-    font-size: 14px;
-    color: #000;
-    font-weight: 700;
-    margin-top: 5px;
-    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
-}
-
-/* =========================================
-   4. MODAL ("More Info" Popup)
-   ========================================= */
-/* Note: The Sidebar (Point Popup) is now in sidebar.css */
-
 .modal {
     display: none; 
     position: fixed; 
@@ -188,33 +9,85 @@ body {
     top: 0;
     width: 100%; 
     height: 100%; 
-    background-color: rgba(0,0,0,0.5); 
-    font-family: 'Noto Sans Armenian', sans-serif;
+    background-color: rgba(0,0,0,0.5); /* Dark overlay */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
+/* Default Modal Content (used by Info Modal) */
 .modal-content {
-    /* 60% Opacity White = 40% Transparent */
-    background-color: rgba(255, 255, 255, 0.6); 
-    
-    /* Blur Effect */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    
-    margin: 10% auto; 
+    background-color: rgba(255, 255, 255, 0.85); 
+    margin: 10% auto; /* Centered vertically */
     padding: 30px;
     border-radius: 15px; 
     width: 50%;
     max-width: 600px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     position: relative;
-    color: #000; 
+    color: #333;
+    max-height: 80vh; /* Prevent it from going off-screen */
+    overflow-y: auto; /* Internal scroll if text is too long */
 }
 
 .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
     color: #333;
-    float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 10;
 }
 .close-modal:hover { color: #000; }
+
+/* =========================================
+   5. SUBMIT VIDEO MODAL (Specific Overrides)
+   ========================================= */
+
+/* 1. Make the container HUGE (Red Box size) */
+#submit-modal .modal-content {
+    width: 90%;           /* Take up 90% of screen width */
+    max-width: 1200px;    /* Cap it for very large screens */
+    height: 90vh;         /* Take up 90% of screen height */
+    margin: 5vh auto;     /* Center it with 5% margin top/bottom */
+    padding: 20px 0 0 0;  /* Remove side/bottom padding, keep top for 'X' button */
+    overflow: hidden;     /* Hide outer scrollbar */
+    display: flex;        /* Use flexbox to stack content */
+    flex-direction: column;
+}
+
+/* 2. Make the container stretch to fill available space */
+.google-form-container {
+    flex: 1;              /* Take up all remaining height below the 'X' */
+    width: 100%;
+    position: relative;
+    overflow: hidden;     /* Ensure no double scrollbars */
+}
+
+/* 3. Force the iframe to fill the container completely */
+.google-form-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 85%;
+        margin: 15% auto;
+    }
+
+    /* On mobile, keep the submit modal huge too */
+    #submit-modal .modal-content {
+        width: 95%;
+        height: 92vh;
+        margin: 4vh auto;
+    }
+}
