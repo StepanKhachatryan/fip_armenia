@@ -229,7 +229,7 @@ body {
     max-width: 700px;     /* Reduced from 1200px to 700px to match form width */
     
     /* HEIGHT: Maximize vertical space */
-    height: 95vh;         /* Occupy 95% of the screen height */
+    height: 100vh;         /* Occupy 100% of the screen height */
     margin: 2.5vh auto;   /* Small margins top/bottom to center it */
     
     padding: 0;           /* Remove padding to let iframe fill edge-to-edge */
