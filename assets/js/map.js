@@ -5,7 +5,7 @@ var map;
 var markersLayer = new L.LayerGroup();
 
 var floodIcon = L.icon({
-    iconUrl: 'assets/icons/flood_marker.png', // Ensure this file exists!
+    iconUrl: 'assets/icons/flood_marker.png', 
     iconSize:     [24, 24], 
     iconAnchor:   [12, 24], 
     popupAnchor:  [0, -24]  
@@ -17,7 +17,6 @@ var floodIcon = L.icon({
 function initMap() {
     if (!document.getElementById('map')) return;
 
-    // Center the map on Armenia
     map = L.map('map', { zoomControl: true }).setView([40.50, 44.50], 9);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -31,21 +30,14 @@ function updateMarkers(data) {
     markersLayer.clearLayers();
     data.forEach(function(item) {
         var marker = L.marker([item.lat, item.lng], { icon: floodIcon });
-        
-        // When clicked, open the sidebar
-        marker.on('click', function() { 
-            openSidebar(item); 
-        });
-        
-        // Store date inside the marker options for filtering
+        marker.on('click', function() { openSidebar(item); });
         marker.options.date = new Date(item.date); 
-        
         markersLayer.addLayer(marker);
     });
 }
 
 // =========================================
-// 3. SIDEBAR LOGIC (YouTube & Facebook)
+// 3. SIDEBAR LOGIC
 // =========================================
 function openSidebar(item) {
     var sidebar = document.getElementById('video-sidebar');
@@ -55,23 +47,12 @@ function openSidebar(item) {
     
     if (item.videos && item.videos.length > 0) {
         item.videos.forEach(url => {
-            // Check if it's Facebook (needs more height) or YouTube
             let height = "300"; 
-            if (url.includes("facebook.com")) {
-                height = "500"; // Facebook Reels are tall
-            }
+            if (url.includes("facebook.com")) height = "500"; 
 
             videoHtml += `
                 <div class="sidebar-video-container" style="margin-bottom: 20px;">
-                    <iframe 
-                        src="${url}" 
-                        width="100%" 
-                        height="${height}" 
-                        frameborder="0" 
-                        style="border:none; overflow:hidden;" 
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
-                        allowfullscreen>
-                    </iframe>
+                    <iframe src="${url}" width="100%" height="${height}" frameborder="0" style="border:none; overflow:hidden;" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             `;
         });
@@ -86,7 +67,6 @@ function openSidebar(item) {
         <hr>
         ${videoHtml} 
     `;
-    
     sidebar.classList.add('active');
 }
 
@@ -95,13 +75,12 @@ function closeSidebar() {
 }
 
 // =========================================
-// 4. NEW SLIDER LOGIC (Updated with Years & Callback)
+// 4. SLIDER LOGIC
 // =========================================
 function initTimeSlider(allData, callback) {
     var slider = document.getElementById('slider');
     var dateLabel = document.getElementById('date-label');
 
-    // 1. Calculate Min/Max Years
     var dates = allData.map(d => new Date(d.date).getTime());
     var minDateObj = new Date(Math.min(...dates));
     var maxDateObj = new Date(Math.max(...dates));
@@ -109,33 +88,24 @@ function initTimeSlider(allData, callback) {
     var startYear = minDateObj.getFullYear();
     var endYear = maxDateObj.getFullYear();
     
-    // Set range from Jan 1st of Start Year to Dec 31st of End Year
     var minTimestamp = new Date(startYear, 0, 1).getTime(); 
     var maxTimestamp = new Date(endYear, 11, 31).getTime(); 
 
-    if (slider.noUiSlider) {
-        slider.noUiSlider.destroy();
-    }
+    if (slider.noUiSlider) slider.noUiSlider.destroy();
 
     noUiSlider.create(slider, {
         start: [minTimestamp, maxTimestamp], 
         connect: true,
         range: { 'min': minTimestamp, 'max': maxTimestamp },
-        step: 24 * 60 * 60 * 1000, // 1 Day
-
-        // Tooltips show Short Month + Year (e.g., "May 2023")
+        step: 24 * 60 * 60 * 1000, 
         tooltips: [
             { to: function(v) { return new Date(parseInt(v)).toLocaleDateString("en-US", { month: 'short', year: 'numeric' }); } },
             { to: function(v) { return new Date(parseInt(v)).toLocaleDateString("en-US", { month: 'short', year: 'numeric' }); } }
         ],
-
-        // Pips only show Start and End Years at the edges
         pips: {
             mode: 'range', 
             density: 100,  
-            format: {
-                to: function (value) { return new Date(value).getFullYear(); }
-            }
+            format: { to: function (value) { return new Date(value).getFullYear(); } }
         }
     });
 
@@ -143,7 +113,6 @@ function initTimeSlider(allData, callback) {
         var startDate = new Date(parseInt(values[0]));
         var endDate = new Date(parseInt(values[1]));
         
-        // Update the label text on screen
         if(dateLabel) {
             dateLabel.style.display = 'block';
             dateLabel.innerHTML = `Showing: <b>${startDate.toLocaleDateString()}</b> - <b>${endDate.toLocaleDateString()}</b>`;
@@ -154,36 +123,56 @@ function initTimeSlider(allData, callback) {
             return itemDate >= startDate.getTime() && itemDate <= endDate.getTime();
         });
 
-        // Run the callback (updateMarkers)
         if(callback) callback(filteredData);
     });
 }
 
 // =========================================
-// 5. START ENGINE (Fetching 'data/floods.json')
+// 5. START ENGINE (Logic + Modals + Fetch)
 // =========================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log("App starting...");
+
+    // --- A. SETUP MODALS (Buttons) ---
+    var infoModal = document.getElementById("info-modal");
+    var btnInfo = document.getElementById("btn-more-info");
+    var closeInfo = infoModal ? infoModal.querySelector(".close-modal") : null;
+
+    if (btnInfo) btnInfo.onclick = function() { infoModal.style.display = "block"; };
+    if (closeInfo) closeInfo.onclick = function() { infoModal.style.display = "none"; };
+
+    var submitModal = document.getElementById("submit-modal");
+    var btnSubmit = document.querySelector(".btn-submit");
+    var closeSubmit = document.getElementById("close-submit");
+
+    if (btnSubmit) {
+        btnSubmit.onclick = function(e) {
+            e.preventDefault();
+            submitModal.style.display = "block";
+        }
+    }
+    if (closeSubmit) closeSubmit.onclick = function() { submitModal.style.display = "none"; };
+
+    window.onclick = function(event) {
+        if (event.target == infoModal) infoModal.style.display = "none";
+        if (event.target == submitModal) submitModal.style.display = "none";
+    }
+
+    // --- B. START MAP ---
     initMap(); 
 
-    // IMPORTANT: This file must be in 'data/floods.json'
+    // --- C. FETCH DATA ---
     fetch('data/floods.json') 
         .then(response => {
             if (!response.ok) throw new Error("HTTP error " + response.status);
             return response.json();
         })
         .then(data => {
-            console.log("Floods data loaded:", data);
-            
-            // 1. Show all markers initially
+            console.log("Data loaded:", data);
             updateMarkers(data);
-            
-            // 2. Initialize the Slider and pass 'updateMarkers' as the callback
             initTimeSlider(data, updateMarkers);
         })
         .catch(error => {
             console.error("Error loading JSON:", error);
-            // Fallback for debugging if file fails to load
-            alert("Error loading map data. Are you using Live Server?");
         });
 });
