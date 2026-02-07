@@ -45,7 +45,7 @@ function updateMarkers(data) {
 }
 
 // =========================================
-// 3. SIDEBAR LOGIC (Now handles YouTube & Facebook)
+// 3. SIDEBAR LOGIC (YouTube & Facebook)
 // =========================================
 function openSidebar(item) {
     var sidebar = document.getElementById('video-sidebar');
@@ -95,54 +95,72 @@ function closeSidebar() {
 }
 
 // =========================================
-// 4. SLIDER LOGIC
+// 4. NEW SLIDER LOGIC (Updated with Years & Callback)
 // =========================================
-function initSlider(data) {
+function initTimeSlider(allData, callback) {
     var slider = document.getElementById('slider');
     var dateLabel = document.getElementById('date-label');
 
-    // 1. Get all dates from JSON and convert to timestamps
-    var dates = data.map(item => new Date(item.date).getTime());
+    // 1. Calculate Min/Max Years
+    var dates = allData.map(d => new Date(d.date).getTime());
+    var minDateObj = new Date(Math.min(...dates));
+    var maxDateObj = new Date(Math.max(...dates));
+
+    var startYear = minDateObj.getFullYear();
+    var endYear = maxDateObj.getFullYear();
     
-    // 2. Find Min and Max
-    var minDate = Math.min(...dates);
-    var maxDate = Math.max(...dates);
+    // Set range from Jan 1st of Start Year to Dec 31st of End Year
+    var minTimestamp = new Date(startYear, 0, 1).getTime(); 
+    var maxTimestamp = new Date(endYear, 11, 31).getTime(); 
 
-    // 3. Buffer the slider range (1 day before, 1 day after)
-    minDate = minDate - 86400000;
-    maxDate = maxDate + 86400000;
-
-    // 4. Create the slider
     if (slider.noUiSlider) {
-        slider.noUiSlider.destroy(); // Destroy existing if re-initializing
+        slider.noUiSlider.destroy();
     }
 
     noUiSlider.create(slider, {
-        start: [minDate, maxDate],
+        start: [minTimestamp, maxTimestamp], 
         connect: true,
-        range: { 'min': minDate, 'max': maxDate },
-        step: 86400000, // 1 day steps
+        range: { 'min': minTimestamp, 'max': maxTimestamp },
+        step: 24 * 60 * 60 * 1000, // 1 Day
+
+        // Tooltips show Short Month + Year (e.g., "May 2023")
+        tooltips: [
+            { to: function(v) { return new Date(parseInt(v)).toLocaleDateString("en-US", { month: 'short', year: 'numeric' }); } },
+            { to: function(v) { return new Date(parseInt(v)).toLocaleDateString("en-US", { month: 'short', year: 'numeric' }); } }
+        ],
+
+        // Pips only show Start and End Years at the edges
+        pips: {
+            mode: 'range', 
+            density: 100,  
+            format: {
+                to: function (value) { return new Date(value).getFullYear(); }
+            }
+        }
     });
 
-    // 5. Update map on drag
-    slider.noUiSlider.on('update', function(values) {
+    slider.noUiSlider.on('update', function (values) {
         var startDate = new Date(parseInt(values[0]));
         var endDate = new Date(parseInt(values[1]));
+        
+        // Update the label text on screen
+        if(dateLabel) {
+            dateLabel.style.display = 'block';
+            dateLabel.innerHTML = `Showing: <b>${startDate.toLocaleDateString()}</b> - <b>${endDate.toLocaleDateString()}</b>`;
+        }
 
-        dateLabel.style.display = 'block';
-        dateLabel.innerHTML = `From: <b>${startDate.toLocaleDateString()}</b> To: <b>${endDate.toLocaleDateString()}</b>`;
-
-        var filteredData = data.filter(item => {
+        var filteredData = allData.filter(item => {
             var itemDate = new Date(item.date).getTime();
             return itemDate >= startDate.getTime() && itemDate <= endDate.getTime();
         });
-        
-        updateMarkers(filteredData);
+
+        // Run the callback (updateMarkers)
+        if(callback) callback(filteredData);
     });
 }
 
 // =========================================
-// 5. START ENGINE (Fetching 'floods.json')
+// 5. START ENGINE (Fetching 'data/floods.json')
 // =========================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log("App starting...");
@@ -156,8 +174,12 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log("Floods data loaded:", data);
+            
+            // 1. Show all markers initially
             updateMarkers(data);
-            initSlider(data);
+            
+            // 2. Initialize the Slider and pass 'updateMarkers' as the callback
+            initTimeSlider(data, updateMarkers);
         })
         .catch(error => {
             console.error("Error loading JSON:", error);
