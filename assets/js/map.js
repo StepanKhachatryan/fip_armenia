@@ -37,7 +37,7 @@ function updateMarkers(data) {
 }
 
 // =========================================
-// 3. SIDEBAR LOGIC (Smart Resizing)
+// 3. SIDEBAR LOGIC (Stronger CSS Override)
 // =========================================
 function openSidebar(item) {
     var sidebar = document.getElementById('video-sidebar');
@@ -48,30 +48,29 @@ function openSidebar(item) {
     if (item.videos && item.videos.length > 0) {
         item.videos.forEach(url => {
             
-            // --- SMART VIDEO SIZING ---
             var isFacebook = url.includes("facebook.com");
-            
-            // Default settings for YouTube (Landscape/Wide)
-            var width = "100%";
-            var height = "300";
-            var containerStyle = "margin-bottom: 20px;";
+            var containerStyle = "";
+            var iframeStyle = "border:none; overflow:hidden; border-radius: 8px;"; 
 
-            // Special settings for Facebook (Vertical Reels)
             if (isFacebook) {
-                width = "270";   // Fixed width (like a phone screen)
-                height = "480";  // Fixed height (9:16 aspect ratio)
-                // This centers the vertical video in the sidebar
+                // FACEBOOK: Force narrow width in CSS (overrides main.css)
+                // We use 'max-width' to ensure it never stretches too wide
+                iframeStyle += " width: 270px; height: 480px; max-width: 100%;";
+                
+                // Center the narrow video
                 containerStyle = "margin-bottom: 20px; display: flex; justify-content: center;"; 
+            } else {
+                // YOUTUBE: Full width
+                iframeStyle += " width: 100%; height: 300px;";
+                containerStyle = "margin-bottom: 20px;";
             }
 
             videoHtml += `
                 <div class="sidebar-video-container" style="${containerStyle}">
                     <iframe 
                         src="${url}" 
-                        width="${width}" 
-                        height="${height}" 
                         frameborder="0" 
-                        style="border:none; overflow:hidden; border-radius: 8px;" 
+                        style="${iframeStyle}" 
                         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
                         allowfullscreen>
                     </iframe>
@@ -89,6 +88,7 @@ function openSidebar(item) {
         <hr>
         ${videoHtml} 
     `;
+    
     sidebar.classList.add('active');
 }
 
