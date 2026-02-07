@@ -37,7 +37,7 @@ function updateMarkers(data) {
 }
 
 // =========================================
-// 3. SIDEBAR LOGIC
+// 3. SIDEBAR LOGIC (Smart Resizing)
 // =========================================
 function openSidebar(item) {
     var sidebar = document.getElementById('video-sidebar');
@@ -47,12 +47,34 @@ function openSidebar(item) {
     
     if (item.videos && item.videos.length > 0) {
         item.videos.forEach(url => {
-            let height = "300"; 
-            if (url.includes("facebook.com")) height = "500"; 
+            
+            // --- SMART VIDEO SIZING ---
+            var isFacebook = url.includes("facebook.com");
+            
+            // Default settings for YouTube (Landscape/Wide)
+            var width = "100%";
+            var height = "300";
+            var containerStyle = "margin-bottom: 20px;";
+
+            // Special settings for Facebook (Vertical Reels)
+            if (isFacebook) {
+                width = "270";   // Fixed width (like a phone screen)
+                height = "480";  // Fixed height (9:16 aspect ratio)
+                // This centers the vertical video in the sidebar
+                containerStyle = "margin-bottom: 20px; display: flex; justify-content: center;"; 
+            }
 
             videoHtml += `
-                <div class="sidebar-video-container" style="margin-bottom: 20px;">
-                    <iframe src="${url}" width="100%" height="${height}" frameborder="0" style="border:none; overflow:hidden;" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="sidebar-video-container" style="${containerStyle}">
+                    <iframe 
+                        src="${url}" 
+                        width="${width}" 
+                        height="${height}" 
+                        frameborder="0" 
+                        style="border:none; overflow:hidden; border-radius: 8px;" 
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
             `;
         });
@@ -128,12 +150,12 @@ function initTimeSlider(allData, callback) {
 }
 
 // =========================================
-// 5. START ENGINE (Logic + Modals + Fetch)
+// 5. START ENGINE
 // =========================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log("App starting...");
 
-    // --- A. SETUP MODALS (Buttons) ---
+    // --- A. SETUP MODALS ---
     var infoModal = document.getElementById("info-modal");
     var btnInfo = document.getElementById("btn-more-info");
     var closeInfo = infoModal ? infoModal.querySelector(".close-modal") : null;
