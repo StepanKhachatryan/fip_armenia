@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("App starting...");
     initMap(); 
 
-    // IMPORTANT: This file must be in 'assets/floods.json'
-    fetch('assets/floods.json') 
+    // IMPORTANT: This file must be in 'data/floods.json'
+    fetch('data/floods.json') 
         .then(response => {
             if (!response.ok) throw new Error("HTTP error " + response.status);
             return response.json();
