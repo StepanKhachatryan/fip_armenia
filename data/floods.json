@@ -177,11 +177,22 @@
     "lat": 39.205892,
     "lng": 46.403570,
     "date": "2026-03-27",
-    "title": "Ջրածածկում Կապանում",
+    "title": "Վաչագան գետի վարարում",
     "videos": [
       "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1302611785099447%2F&show_text=false&width=267&t=0",
       "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F917392271215519%2F&show_text=false&width=267&t=0"
     ],
-    "description": "Վարարել է վաչագան գետը"
+    "description": "Տեղատարափ անձրևի հետևանքով վարարել է Վաչագան գետը"
+   }, 
+   {
+    "id": 202603271,
+    "lat": 39.053651, 46.514783
+    "lng": 46.403570,
+    "date": "2026-03-27",
+    "title": "Վարարել է Ծավ",
+    "videos": [
+      "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F970817892180175%2F&show_text=false&width=267&t=0"
+    ],
+    "description": "Տեղատարափ անձրևի հետևանքով վարարել է Ծավ գետը"
    }
 ]
