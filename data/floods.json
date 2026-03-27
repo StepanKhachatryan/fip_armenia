@@ -160,7 +160,7 @@
     ],
     "description": "Իրավիճակը՝ Մալաթիա–Սեբաստիա վարչական շրջանում՝ հերթական անձրեւից հետո"
    },
-    {
+   {
     "id": 20260327,
     "lat": 39.220252,
     "lng": 46.358426,
@@ -171,5 +171,16 @@
       "https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1329848272315043%2F&show_text=false&width=560&t=0"
     ],
     "description": "Առաջին տեսանյութը ներկայացնում է ջրածածկում Կապանի Գրիգոր Արզումանյան փողոցում"
+   },
+   {
+    "id": 202603271,
+    "lat": 39.209065,
+    "lng": 46.405994,
+    "date": "2026-03-27",
+    "title": "Ջրածածկում Կապանում",
+    "videos": [
+      "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1302611785099447%2F&show_text=false&width=267&t=0"
+    ],
+    "description": "Վարարել է Ողջի գետը"
    }
 ]
