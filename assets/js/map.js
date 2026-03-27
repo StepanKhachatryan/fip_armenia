@@ -17,7 +17,7 @@ var floodIcon = L.icon({
 function initMap() {
     if (!document.getElementById('map')) return;
 
-    map = L.map('map', { zoomControl: true }).setView([40.30, 44.10], 8);
+    map = L.map('map', { zoomControl: true }).setView([40.30, 44.70], 8);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
