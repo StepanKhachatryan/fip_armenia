@@ -7,7 +7,6 @@
     "title": "Ջրհեղեղ Մեղրիում",
     "videos": [
       "https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fruzanna.hambarcumyan%2Fvideos%2F588043554643636%2F&show_text=false&width=560&t=0",
-      "https://www.instagram.com/reel/C_3oYghum_q/embed/" 
      ],
     "description": "Սելավային արագ հոսքը Մեղրի քաղաքի թաղամասերում։"
   },
@@ -49,7 +48,7 @@
      ],
     "description": "Դեբեդ գետի վարարման հետևանքով ջրհեղեղ Լոռու մարզում։ Տեսանյութը ներկայացնում է տարբեր տեղամասեր։"
   },
-   {
+  {
     "id": 202405261,
     "lat": 41.123129,
     "lng": 44.286900,
@@ -62,6 +61,17 @@
       "https://www.youtube.com/embed/yekOZsiiEV0" 
      ],
     "description": "Տաշիր գետի վարարման հետևանքով ջրհեղեղ Տաշիր քաղաքում։ Տեսանյութը ներկայացնում է տարբեր տեղամասեր։"
+  },
+  {
+    "id": 20240913,
+    "lat": 41.123129,
+    "lng": 44.286900,
+    "date": "2024-09-13",
+    "title": "Ջրածածկում Երևանում",
+    "videos": [
+      "https://www.instagram.com/reel/C_3oYghum_q/embed/" 
+     ],
+    "description": "Անձրևաջուրը լցվել է Մաշտոցի պողոտայի գետնանցումի սուպերմարկետը"
   },
   {
     "id": 20250506,
