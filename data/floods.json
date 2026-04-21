@@ -291,7 +291,7 @@
     ],
     "description": "Աբովյան համայնքի Մայակովսկի բնակավայրում անձրև և ձնհալի հետևանքով գետը վարարել է և ջրածածկել հարակից տները"
    },
-    {
+   {
     "id": 20260420,
     "lat": 40.197940,
     "lng": 44.493182,
@@ -301,5 +301,16 @@
      "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F960967476475411%2F&show_text=false&width=267&t=0"
     ],
     "description": "Երևան քաղաքի Բարեկամություն մետրոյի գետնանցումը ջրածածկվել է անձրևի հետևանքով"
+   },
+   {
+    "id": 202604201,
+    "lat": 40.177723,
+    "lng": 44.439703,
+    "date": "2026-04-20",
+    "title": "Ջրածածկում Գուսան Շերամի փողոցում",
+    "videos": [
+       "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1477310200528050%2F&show_text=false&width=268&t=0"
+    ],
+    "description": "Հորդառատ անձրևի պաատճառով ջրածածկվել է Գուսան Շերամի փողոցը"
    }
 ]
