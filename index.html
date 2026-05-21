@@ -28,6 +28,27 @@
                 height: 70vh;
             }
         }
+        
+        /* Styling for new buttons */
+        #btn-download-data {
+            display: none;
+        }
+        
+        .btn-login, .btn-logout {
+            background-color: #4CAF50;
+        }
+        
+        .btn-login:hover, .btn-logout:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-download {
+            background-color: #2196F3;
+        }
+        
+        .btn-download:hover {
+            background-color: #0b7dda;
+        }
     </style>
 </head>
 <body>
@@ -39,6 +60,8 @@
         </div>
         
         <div class="header-right">
+            <button id="btn-download-data" class="btn btn-download" onclick="downloadDataAsCSV()">Ներբեռնել տվյալները</button>
+            <button id="btn-auth" class="btn btn-login" onclick="handleAuthClick()">Մուտք</button>
             <a href="#" class="btn btn-submit">Ներկայացնել տեսանյութ</a>
             <a href="#" class="btn btn-donate">Նվիրաբերել</a>
             <button id="btn-more-info" class="btn btn-info">Ավելին</button>
@@ -63,15 +86,15 @@
             <h2>Հարթակի մասին</h2>
             <p>
                 Բարի գալուստ <b>ՀՀ-ում ջրհեղեղների տեղեկատվական հարթակ</b>։ 
-                Հարթակը հավաքագրում է սոցիալական ցանցերում օգտատերերի կողմից հրապարակված ջրհեղեղների վերաբերյալ տեսանյութերը։
-                Մեկ հարթակում տեսանյութերի հավաքագրումը կօգնի պետական, մասնավոր, կրթական, գիտական և հասարակական ոլորտներին ունենալ
+                Հարթակը հավաքագրում է սոցիալական ցանցերում օգտատերերի կողմից հրապարակված ջրհեղեղների վերաբերյա...
+                Մեկ հարթակում տեսանյութերի հավաքագրումը կօգնի պետական, մասնավոր, կրթական, գիտական և հասարակական ո...
                 համապարփակ պատկերացում Հայաստանում տեղի ունեցած ջրհեղեղների վերաբերյալ։
             </p>
             <h3>Ինչպե՞ս է հարթակն աշխատում</h3>
             <ul>
                 <li><b>Դիտում:</b> Կուրսորի օգնությամբ տեղաշարժեք քարտեզը, որպեսզի տեսնեք ջրհեղեղի դեպքերը։</li>
-                <li><b>Ֆիլտրեր:</b> Օգտագործեք էկրանի ստորին մասում տեղակայված ժամանակային ֆիլտրը, որպեսզի տեսնեք ձեր ցանկացած ժամանակահատվածում տեղի ունեցած ջրհեղեղի երևույթը։</li>
-                <li><b>Մասնակցություն:</b> Եթե ունեք ջրհեղեղի վերաբերյալ տեսանյութ խնդրում ենք կիսվել մեզ հետ՝ սեղմելով <b>Ներկայացնել տեսանյութ</b> կոճակը։</li>
+                <li><b>Ֆիլտրեր:</b> Օգտագործեք էկրանի ստորին մասում տեղակայված ժամանակային ֆիլտրը, որպեսզի տեսնեք ձեր ...</li>
+                <li><b>Մասնակցություն:</b> Եթե ունեք ջրհեղեղի վերաբերյալ տեսանյութ խնդրում ենք կիսվել մեզ հետ՝ սեղմել...</li>
             </ul>
             <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
                 Հարթակը ստեղծվել է <b>GeoGeeks ՍՊԸ</b>-ի կողմից։
@@ -94,8 +117,20 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     
+    <!-- New Authentication and CSV Download Scripts -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/csv-download.js"></script>
+    
+    <!-- Existing Scripts -->
     <script src="assets/js/map.js"></script>
     <script src="assets/js/filters.js"></script>
     <script src="assets/js/app.js"></script>
+    
+    <script>
+        // Initialize authentication UI on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.updateUIForAuth();
+        });
+    </script>
 </body>
 </html>
