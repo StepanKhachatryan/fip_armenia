@@ -19,37 +19,14 @@
     <style>
         .google-form-frame {
             width: 100%;
-            height: 100%; /* Adjust height based on your form length */
+            height: 100%;
             border: none;
             margin-top: 10px;
         }
-        /* Mobile adjustment for form height */
-        @media (max-width: 768px) {
-            .google-form-frame {
-                height: 70vh;
-            }
-        }
         
-        /* Styling for new buttons */
-        #btn-download-data {
-            display: none;
-        }
-        
-        .btn-login, .btn-logout {
-            background-color: #4CAF50;
-        }
-        
-        .btn-login:hover, .btn-logout:hover {
-            background-color: #45a049;
-        }
-        
-        .btn-download {
-            background-color: #2196F3;
-        }
-        
-        .btn-download:hover {
-            background-color: #0b7dda;
-        }
+        .btn-submit { background-color: #00a97a; color: white; }
+        .btn-donate { background-color: #f7db5d; color: #333; }
+        .btn-info   { background-color: #0c8495; color: white; }
     </style>
 </head>
 <body>
@@ -61,8 +38,6 @@
         </div>
         
         <div class="header-right">
-            <button id="btn-download-data" class="btn btn-download" onclick="downloadDataAsCSV()">Ներբեռնել տվյալները</button>
-            <button id="btn-auth" class="btn btn-login" onclick="handleAuthClick()">Մուտք</button>
             <a href="#" class="btn btn-submit">Ներկայացնել տեսանյութ</a>
             <a href="#" class="btn btn-donate">Նվիրաբերել</a>
             <button id="btn-more-info" class="btn btn-info">Ավելին</button>
@@ -118,20 +93,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     
-    <!-- New Authentication and CSV Download Scripts -->
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/csv-download.js"></script>
-    
     <!-- Existing Scripts -->
     <script src="assets/js/map.js"></script>
     <script src="assets/js/filters.js"></script>
     <script src="assets/js/app.js"></script>
-    
-    <script>
-        // Initialize authentication UI on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            auth.updateUIForAuth();
-        });
-    </script>
 </body>
 </html>
