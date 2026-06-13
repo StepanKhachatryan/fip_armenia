@@ -23,11 +23,10 @@ body {
    2. HEADER (Glassmorphism)
    ========================================= */
 #main-header {
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 20px;
     right: 20px;
-    height: 70px;
     background: rgba(255, 255, 255, 0.7); 
     backdrop-filter: blur(10px);         
     -webkit-backdrop-filter: blur(10px);
@@ -35,16 +34,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 25px;
+    padding: 15px 25px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    z-index: 1500; 
+    z-index: 1500;
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: 15px;
-    flex: 1;
+    flex: 0 1 auto;
     overflow: hidden;
 }
 
@@ -53,10 +52,11 @@ body {
     height: 40px; 
     width: auto;
     object-fit: contain;
+    flex-shrink: 0;
 }
 
 .platform-title {
-    font-size: 18px; 
+    font-size: 16px; 
     color: #333;
     margin: 0;
     font-weight: 700; 
@@ -68,24 +68,31 @@ body {
 
 .header-right {
     display: flex;
-    gap: 10px;
-    flex-shrink: 0; 
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 /* Buttons */
 .btn {
-    padding: 10px 20px;
+    padding: 10px 16px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 8px;
     font-weight: 700; 
     cursor: pointer;
     transition: all 0.2s;
     border: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: white; 
     font-family: 'Noto Sans Armenian', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
+
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -99,7 +106,7 @@ body {
    3. SLIDER CONTROLS
    ========================================= */
 #controls {
-    position: absolute;
+    position: fixed;
     bottom: 40px;        
     left: 0;             
     width: 100%;         
@@ -267,7 +274,111 @@ body {
     border: none;
 }
 
-/* Mobile Adjustments */
+/* =========================================
+   6. RESPONSIVE HEADER
+   ========================================= */
+
+/* Tablet and smaller */
+@media (max-width: 1024px) {
+    #main-header {
+        padding: 12px 15px;
+        gap: 10px;
+    }
+
+    .platform-title {
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+}
+
+/* Small devices */
+@media (max-width: 767px) {
+    #main-header {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .header-left {
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .logo {
+        height: 32px;
+        width: auto;
+    }
+
+    .platform-title {
+        font-size: 0.9rem;
+        line-height: 1.1;
+    }
+
+    .header-right {
+        gap: 6px;
+    }
+
+    .btn {
+        padding: 7px 10px;
+        font-size: 10px;
+        border-radius: 6px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575px) {
+    #main-header {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .header-left {
+        gap: 6px;
+    }
+
+    .logo {
+        height: 28px;
+    }
+
+    .platform-title {
+        font-size: 0.8rem;
+        line-height: 1;
+    }
+
+    .header-right {
+        gap: 4px;
+    }
+
+    .btn {
+        padding: 6px 8px;
+        font-size: 9px;
+        border-radius: 5px;
+    }
+}
+
+/* Very small devices */
+@media (max-width: 375px) {
+    .platform-title {
+        font-size: 0.75rem;
+    }
+
+    .btn {
+        padding: 5px 7px;
+        font-size: 8px;
+    }
+}
+
+/* Mobile Adjustments for Submit Modal */
 @media (max-width: 768px) {
     #submit-modal .modal-content {
         width: 100%;      /* Full width on phone */
