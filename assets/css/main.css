@@ -192,25 +192,33 @@ body {
     left: 0;
     top: 0;
     width: 100%; 
-    height: 100%; 
+    height: 100%;
+    max-height: 100vh;
     background-color: rgba(0,0,0,0.5); /* Dark overlay */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    overflow: hidden;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Default Modal Content (used by Info Modal) */
 .modal-content {
-    background-color: rgba(255, 255, 255, 0.85); 
-    margin: 10% auto; /* Centered vertically */
+    background-color: rgba(255, 255, 255, 0.95); 
     padding: 30px;
     border-radius: 15px; 
-    width: 50%;
+    width: 90%;
     max-width: 600px;
+    max-height: 80vh;
     box-shadow: 0 5px 25px rgba(0,0,0,0.2);
     position: relative;
     color: #333;
-    max-height: 80vh; /* Prevent it from going off-screen */
-    overflow-y: auto; /* Internal scroll if text is too long */
+    overflow-y: auto;
+    z-index: 3001;
 }
 
 .close-modal {
@@ -221,7 +229,8 @@ body {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    z-index: 10;
+    z-index: 3002;
+    transition: color 0.2s;
 }
 .close-modal:hover { color: #000; }
 
@@ -233,27 +242,35 @@ body {
 #submit-modal .modal-content {
     /* WIDTH: Adjusted to fit Google Form naturally without huge empty sides */
     width: 95%;           
-    max-width: 700px;     /* Reduced from 1200px to 700px to match form width */
+    max-width: 700px;
     
     /* HEIGHT: Maximize vertical space */
-    height: 95vh;         /* Occupy 95% of the screen height */
-    margin: 2.5vh auto;   /* Small margins top/bottom to center it */
+    height: 90vh;
+    max-height: 90vh;
+    margin: 0;
     
     padding: 0;           /* Remove padding to let iframe fill edge-to-edge */
     overflow: hidden;     /* Hide outer scrollbar */
     display: flex;        
     flex-direction: column;
     background: #fff;     /* Ensure background is white to blend with form */
+    border-radius: 10px;
+    z-index: 3001;
 }
 
 /* Close button positioning for this specific modal */
 #submit-modal .close-modal {
     top: 10px;
     right: 15px;
-    z-index: 20;          /* Ensure it sits on top of the iframe */
-    background: rgba(255,255,255,0.8); /* Small background to ensure visibility */
+    z-index: 3002;        /* Ensure it sits on top of the iframe */
+    background: rgba(255,255,255,0.9);
     border-radius: 50%;
     padding: 0 8px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 2. Container takes up ALL remaining space */
@@ -293,6 +310,21 @@ body {
         padding: 8px 12px;
         font-size: 11px;
     }
+
+    .modal-content {
+        width: 85%;
+        max-width: 550px;
+        max-height: 75vh;
+        padding: 20px;
+    }
+
+    .close-modal {
+        top: 12px;
+        right: 12px;
+        font-size: 24px;
+        width: 32px;
+        height: 32px;
+    }
 }
 
 /* Small devices */
@@ -330,6 +362,43 @@ body {
         font-size: 10px;
         border-radius: 6px;
     }
+
+    .modal {
+        padding: 0;
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 95vw;
+        max-height: 85vh;
+        height: auto;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        font-size: 22px;
+        width: 30px;
+        height: 30px;
+    }
+
+    #submit-modal .modal-content {
+        width: 95%;
+        max-width: 95vw;
+        height: 85vh;
+        max-height: 85vh;
+        margin: 0;
+    }
+
+    #submit-modal .close-modal {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
 }
 
 /* Extra small devices */
@@ -364,6 +433,45 @@ body {
         font-size: 9px;
         border-radius: 5px;
     }
+
+    .modal {
+        padding: 0;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 80px;
+    }
+
+    .modal-content {
+        width: 90%;
+        max-width: 90vw;
+        max-height: calc(100vh - 100px);
+        height: auto;
+        margin: 0;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .close-modal {
+        top: 8px;
+        right: 8px;
+        font-size: 20px;
+        width: 28px;
+        height: 28px;
+    }
+
+    #submit-modal .modal-content {
+        width: 90%;
+        max-width: 90vw;
+        height: calc(100vh - 100px);
+        max-height: calc(100vh - 100px);
+        margin: 0;
+    }
+
+    #submit-modal .close-modal {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
 }
 
 /* Very small devices */
@@ -376,15 +484,23 @@ body {
         padding: 5px 7px;
         font-size: 8px;
     }
-}
 
-/* Mobile Adjustments for Submit Modal */
-@media (max-width: 768px) {
+    .modal-content {
+        width: 85%;
+        max-width: 85vw;
+        max-height: calc(100vh - 80px);
+        padding: 12px;
+    }
+
+    .close-modal {
+        font-size: 18px;
+        width: 26px;
+        height: 26px;
+    }
+
     #submit-modal .modal-content {
-        width: 100%;      /* Full width on phone */
-        height: 100%;     /* Full height on phone */
-        margin: 0;        /* No margins on phone */
-        border-radius: 0; /* Square corners on phone */
-        max-width: none;
+        width: 85%;
+        max-width: 85vw;
+        height: calc(100vh - 80px);
     }
 }
