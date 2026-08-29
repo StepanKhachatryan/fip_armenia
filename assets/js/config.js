@@ -27,6 +27,10 @@ var REGIONS = [
   { code: 'tavush',      name: 'Տավուշ' }
 ];
 
+/* How many video links a single incident may carry. Mirrors the
+   cardinality check on floods.videos / flood_submissions.videos. */
+var MAX_VIDEOS = 25;
+
 /* Video hosts we are willing to embed in an iframe. */
 var ALLOWED_VIDEO_HOSTS = [
   'youtube.com', 'www.youtube.com', 'youtu.be', 'www.youtu.be',

@@ -2,8 +2,6 @@
    SUBMIT.JS — public "report a flood" form
    ============================================= */
 
-var MAX_VIDEOS = 10;
-
 function addVideoInput(value) {
   var wrap = document.getElementById('video-inputs');
   if (wrap.children.length >= MAX_VIDEOS) return;
@@ -118,6 +116,8 @@ function resetSubmitForm() {
 function initSubmitForm() {
   fillRegionSelect();
   addVideoInput('');
+
+  document.getElementById('max-videos-hint').textContent = MAX_VIDEOS;
 
   /* Today is the latest date a flood can have been observed. */
   var today = new Date();

@@ -15,7 +15,8 @@ repository — the map fetches everything at runtime.
 - **Filters (left rail)** — a month-by-month range slider plus per-marz
   checkboxes with live counts, and a free-text search in the header.
 - **Details (right rail)** — date, place, description and embedded videos for
-  the selected incident, with a shareable `?id=` deep link.
+  the selected incident, with a shareable `?id=` deep link. An incident may
+  carry up to 25 clips, and each one is rendered at its own aspect ratio.
 - **Reporting** — the "Ներկայացնել" button opens an in-app form that writes
   straight to the moderation queue. No Google Forms.
 - **Responsive** — on narrow screens both rails become bottom sheets and the
@@ -36,8 +37,25 @@ Row level security:
   `status = 'pending'`. Nobody anonymous can read, update or delete the queue,
   so a submission never reaches the map before a human approves it.
 
-Coordinates are constrained to Armenia's bounding box, and the front end only
-embeds video URLs from YouTube, Facebook, Instagram and TikTok.
+Coordinates are constrained to Armenia's bounding box, `videos` is capped at
+25 links per incident, and the front end only embeds video URLs from YouTube,
+Facebook, Instagram and TikTok.
+
+## Video sizing
+
+`normalizeVideoUrl()` in `assets/js/util.js` returns each clip's width/height
+ratio alongside its embed URL, and the detail panel reserves exactly that box
+before the iframe loads, so nothing is letterboxed and the panel never
+reflows. The ratio is taken from the link itself wherever the platform states
+it — Facebook plugin URLs carry explicit per-video `width`/`height`, and the
+vertical formats (YouTube Shorts, Reels, TikTok) are identifiable from the
+path. Everything else falls back to that platform's own frame.
+
+Note that no further precision is available client-side: YouTube's and
+TikTok's oEmbed endpoints report the player's default box rather than the
+video's real dimensions, and Facebook's and Instagram's require an app token.
+If a clip ever needs a different shape, adjust the `width`/`height` in its
+stored Facebook URL.
 
 ## Configuration
 

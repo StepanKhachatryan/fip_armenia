@@ -44,9 +44,29 @@ function regionName(code) {
 }
 
 /* ---- Video links ----
-   Accepts either a ready-made embed URL or a normal share link and
-   returns a safe embed URL, or null when the host is not on the
-   allow-list. Everything rendered into an iframe passes through here. */
+   Accepts either a ready-made embed URL or a normal share link and returns
+   { url, ratio } — ratio being width/height — or null when the host is not
+   on the allow-list. Everything rendered into an iframe passes through here.
+
+   The ratio is read from the link itself wherever the platform states it:
+   Facebook plugin URLs carry explicit width/height per video, and the
+   vertical formats (Shorts, Reels, TikTok) are identifiable from the path.
+   Nothing else exposes real pixel dimensions to a browser — YouTube's and
+   TikTok's oEmbed endpoints answer with the player's default box, not the
+   video's — so the remaining cases fall back to the platform's own frame. */
+
+/* Keep a video inside sane bounds: at most twice as wide as tall, and at
+   most a little over twice as tall as wide. */
+var RATIO_MIN = 0.45;
+var RATIO_MAX = 2.2;
+var RATIO_WIDE = 16 / 9;
+var RATIO_TALL = 9 / 16;
+
+function clampRatio(r) {
+  if (!r || !isFinite(r) || r <= 0) return RATIO_WIDE;
+  return Math.min(RATIO_MAX, Math.max(RATIO_MIN, r));
+}
+
 function normalizeVideoUrl(raw) {
   var url;
   try { url = new URL(String(raw).trim()); } catch (e) { return null; }
@@ -57,27 +77,35 @@ function normalizeVideoUrl(raw) {
   var path = url.pathname;
 
   if (host === 'youtube.com' || host === 'youtu.be') {
-    var id = null;
+    var id = null, vertical = false;
     if (host === 'youtu.be')                 id = path.slice(1);
     else if (path.indexOf('/embed/') === 0)  id = path.slice(7);
-    else if (path.indexOf('/shorts/') === 0) id = path.slice(8);
+    else if (path.indexOf('/shorts/') === 0) { id = path.slice(8); vertical = true; }
     else if (path === '/watch')              id = url.searchParams.get('v');
     if (!id) return null;
     id = id.split('/')[0];
     if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) return null;
-    return { url: 'https://www.youtube.com/embed/' + id, portrait: false };
+    return {
+      url: 'https://www.youtube.com/embed/' + id,
+      ratio: vertical ? RATIO_TALL : RATIO_WIDE
+    };
   }
 
   if (host === 'facebook.com' || host === 'fb.watch') {
     if (path.indexOf('/plugins/video.php') === 0) {
-      var h = parseInt(url.searchParams.get('height'), 10);
+      /* Facebook states the real per-video box in the embed URL. */
       var w = parseInt(url.searchParams.get('width'), 10);
-      return { url: url.href, portrait: !!(h && w && h > w) };
+      var h = parseInt(url.searchParams.get('height'), 10);
+      return { url: url.href, ratio: clampRatio(w && h ? w / h : RATIO_TALL) };
     }
+    /* A plain reel/video link: reels are vertical, everything else 16:9. */
+    var isReel = /^\/reels?\//.test(path);
+    var box = isReel ? { w: 267, h: 476 } : { w: 560, h: 314 };
     return {
       url: 'https://www.facebook.com/plugins/video.php?href=' +
-           encodeURIComponent(url.href) + '&show_text=false&width=267&height=476',
-      portrait: true
+           encodeURIComponent(url.href) + '&show_text=false' +
+           '&width=' + box.w + '&height=' + box.h,
+      ratio: clampRatio(box.w / box.h)
     };
   }
 
@@ -85,13 +113,18 @@ function normalizeVideoUrl(raw) {
     var ig = path.match(/^\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/);
     if (!ig) return null;
     var kind = ig[1] === 'reels' ? 'reel' : ig[1];
-    return { url: 'https://www.instagram.com/' + kind + '/' + ig[2] + '/embed/', portrait: true };
+    /* Reels and IGTV are vertical; a feed post is square media in a
+       slightly taller card. */
+    return {
+      url: 'https://www.instagram.com/' + kind + '/' + ig[2] + '/embed/',
+      ratio: kind === 'p' ? 0.8 : RATIO_TALL
+    };
   }
 
   if (host === 'tiktok.com') {
     var tk = path.match(/(?:\/embed(?:\/v2)?\/|\/video\/)(\d{6,25})/);
     if (!tk) return null;
-    return { url: 'https://www.tiktok.com/embed/v2/' + tk[1], portrait: true };
+    return { url: 'https://www.tiktok.com/embed/v2/' + tk[1], ratio: RATIO_TALL };
   }
 
   return null;
@@ -100,7 +133,10 @@ function normalizeVideoUrl(raw) {
 function buildVideoEmbed(raw) {
   var v = normalizeVideoUrl(raw);
   if (!v) return '';
-  return '<div class="video-wrapper ' + (v.portrait ? 'is-portrait' : 'is-wide') + '">'
+  /* Reserve the exact box before the iframe loads, so the panel never
+     reflows and nothing is letterboxed. */
+  var padding = (100 / v.ratio).toFixed(3);
+  return '<div class="video-wrapper" style="padding-top:' + padding + '%">'
        + '<iframe src="' + escHtml(v.url) + '" loading="lazy" frameborder="0"'
        + ' referrerpolicy="strict-origin-when-cross-origin"'
        + ' allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"'

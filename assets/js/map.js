@@ -132,9 +132,14 @@ function openDetail(item) {
   srcEl.textContent = item.source ? 'Աղբյուր՝ ' + item.source : '';
   srcEl.hidden = !item.source;
 
+  /* Each embed is sized from its own aspect ratio; links we cannot
+     recognise are dropped rather than rendered as a broken frame. */
+  var embeds = (item.videos || []).map(buildVideoEmbed).filter(Boolean);
   var videosEl = document.getElementById('detail-videos');
-  var html = (item.videos || []).map(buildVideoEmbed).join('');
-  videosEl.innerHTML = html || '<p class="empty-note">Այս դեպքի համար տեսանյութ չկա։</p>';
+  videosEl.innerHTML = embeds.length
+    ? (embeds.length > 1 ? '<p class="videos-count">' + embeds.length + ' տեսանյութ</p>' : '')
+      + embeds.join('')
+    : '<p class="empty-note">Այս դեպքի համար տեսանյութ չկա։</p>';
 
   document.getElementById('detail-body').scrollTop = 0;
   panel.classList.add('active');
