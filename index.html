@@ -4,40 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Հայաստանի Հանրապետությունում դիտված ջրհեղեղների տեղեկատվական հարթակ">
+  <meta name="theme-color" content="#0b5f86">
   <title>Ջրհեղեղների Հարթակ</title>
 
+  <link rel="icon" href="assets/icons/GeoGeeks_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-  <!-- Full-screen map -->
+  <!-- ===== MAP ===== -->
   <div id="map" role="application" aria-label="Ջրհեղեղների քարտեզ"></div>
 
   <!-- ===== HEADER ===== -->
   <header id="main-header" role="banner">
     <div class="header-left">
-      <img src="assets/icons/GeoGeeks_logo.png" alt="GeoGeeks" class="logo" loading="lazy">
-      <div class="title-block">
-        <span class="platform-title-short">ՀՀ-ում դիտված ջրհեղեղների տեղեկատվական հարթակ</span>
-      </div>
+      <img src="assets/icons/GeoGeeks_logo.png" alt="GeoGeeks" class="logo" width="34" height="34">
+      <span class="platform-title">ՀՀ-ում դիտված ջրհեղեղների տեղեկատվական հարթակ</span>
     </div>
 
-    <div class="search-bar" id="search-bar">
+    <div class="search-bar">
       <svg class="search-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.6"/>
         <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
       <input type="search" id="search-input" class="search-input"
-        placeholder="Որոնել դեպք..." aria-label="Որոնել ջրհեղեղ">
+             placeholder="Որոնել դեպք..." aria-label="Որոնել ջրհեղեղի դեպք">
     </div>
 
     <div class="header-right">
+      <button class="icon-btn only-mobile" id="search-toggle" aria-label="Որոնում" title="Որոնում">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+
       <button class="icon-btn" id="view-toggle" aria-label="Ցուցակի տեսք" title="Ցուցակ">
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <rect x="3" y="4" width="14" height="2" rx="1" fill="currentColor"/>
@@ -45,81 +52,129 @@
           <rect x="3" y="14" width="14" height="2" rx="1" fill="currentColor"/>
         </svg>
       </button>
+
       <button class="icon-btn" id="theme-toggle" aria-label="Փոխել թեման" title="Մուգ/Բաց ռեժիմ">
         <svg id="theme-icon-light" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.6"/>
           <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
         </svg>
-        <svg id="theme-icon-dark" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="display:none">
+        <svg id="theme-icon-dark" viewBox="0 0 20 20" fill="none" aria-hidden="true" hidden>
           <path d="M17 12.3A7 7 0 1 1 7.7 3a5.5 5.5 0 0 0 9.3 9.3z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="btn btn-submit" id="btn-submit-video">
-        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" style="width:14px;height:14px;margin-right:5px">
-          <path d="M8 1v10M4 7l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <button class="btn btn-primary" id="btn-submit-video">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 1v10M4 7l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Ներկայացնել
+        <span class="btn-label">Ներկայացնել</span>
       </button>
-      <a class="btn btn-donate" href="https://www.gofundme.com" target="_blank" rel="noopener">Նվիրաբերել</a>
-      <button class="btn btn-info" id="btn-more-info" aria-label="Հարթակի մասին">?</button>
+
+      <button class="icon-btn" id="btn-more-info" aria-label="Հարթակի մասին" title="Հարթակի մասին">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M10 9v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="10" cy="6.2" r="1" fill="currentColor"/>
+        </svg>
+      </button>
     </div>
   </header>
 
-  <!-- ===== STATS PILL ===== -->
-  <div id="stats-bar" aria-live="polite" aria-atomic="true">
-    <span class="stats-dot"></span>
-    <span id="stats-count">— դեպք</span>
-    <span class="stats-sep">|</span>
-    <span id="stats-range"></span>
-  </div>
+  <!-- ===== LEFT FILTER PANEL ===== -->
+  <aside id="filter-panel" aria-label="Ֆիլտրեր">
+    <div class="sheet-grip" aria-hidden="true"></div>
 
-  <!-- ===== MAP LEGEND ===== -->
-  <div id="map-legend" aria-label="Քարտեզի լեգենդ">
-    <div class="legend-row">
-      <span class="legend-dot" style="background:#00a97a"></span><span>2025–այժմ</span>
-    </div>
-    <div class="legend-row">
-      <span class="legend-dot" style="background:#1a6fa8"></span><span>2020–2024</span>
-    </div>
-    <div class="legend-row">
-      <span class="legend-dot" style="background:#f59e0b"></span><span>2016–2019</span>
-    </div>
-    <div class="legend-row">
-      <span class="legend-dot" style="background:#e85d3a"></span><span>2014–2015</span>
-    </div>
-  </div>
-
-  <!-- ===== DATE SLIDER ===== -->
-  <div id="controls" role="region" aria-label="Ամսաթվի ֆիլտր">
-    <div id="slider" aria-label="Ընտրեք ամսաթվի միջակայք"></div>
-  </div>
-
-  <!-- ===== SIDEBAR (desktop: right panel; mobile: bottom sheet) ===== -->
-  <aside id="video-sidebar" aria-label="Դեպքի մանրամասներ" aria-hidden="true">
-    <div class="sidebar-drag" id="sidebar-drag" role="presentation"></div>
-    <div class="sidebar-head">
-      <div class="sidebar-meta">
-        <p id="sidebar-date" class="sidebar-date-text"></p>
-        <h2 id="sidebar-title" class="sidebar-title-text"></h2>
+    <div class="panel-head">
+      <h2 class="panel-title">
+        <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M2 4h14M4.5 9h9M7.5 14h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Ֆիլտրեր
+      </h2>
+      <div class="panel-head-actions">
+        <button class="link-btn" id="btn-reset-filters">Մաքրել</button>
+        <button class="close-btn only-mobile" id="close-filters" aria-label="Փակել">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
-      <button class="close-btn" id="close-sidebar" aria-label="Փակել">
+    </div>
+
+    <div class="panel-scroll">
+      <!-- result count -->
+      <div id="stats-bar" aria-live="polite">
+        <strong id="stats-count">—</strong>
+        <span id="stats-total"></span>
+      </div>
+
+      <!-- time filter -->
+      <section class="filter-group">
+        <h3 class="filter-group-title">Ժամանակահատված</h3>
+        <div class="range-readout">
+          <span id="range-from">—</span>
+          <svg class="range-arrow" viewBox="0 0 16 8" fill="none" aria-hidden="true">
+            <path d="M0 4h14M11 1l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="range-to">—</span>
+        </div>
+        <div id="month-slider" aria-label="Ընտրեք ամիսների միջակայքը"></div>
+        <div class="preset-row" role="group" aria-label="Արագ ընտրություն">
+          <button class="chip" data-preset="all">Բոլորը</button>
+          <button class="chip" data-preset="12m">Վերջին 12 ամիս</button>
+          <button class="chip" data-preset="year">Այս տարի</button>
+        </div>
+      </section>
+
+      <!-- region filter -->
+      <section class="filter-group">
+        <div class="filter-group-head">
+          <h3 class="filter-group-title">Ըստ մարզերի</h3>
+          <button class="link-btn" id="btn-toggle-regions">Ոչ մեկը</button>
+        </div>
+        <div id="region-list" class="region-list"></div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- mobile filter launcher -->
+  <button id="filter-fab" class="only-mobile" aria-label="Ֆիլտրեր">
+    <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M2 4h14M4.5 9h9M7.5 14h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>Ֆիլտրեր</span>
+    <span id="filter-fab-badge" hidden></span>
+  </button>
+  <div id="filter-overlay" class="overlay"></div>
+
+  <!-- ===== RIGHT DETAIL PANEL ===== -->
+  <aside id="detail-panel" aria-label="Դեպքի մանրամասներ" aria-hidden="true">
+    <div class="sheet-grip" id="detail-grip"></div>
+    <div class="panel-head">
+      <div class="detail-meta">
+        <p id="detail-date" class="detail-date"></p>
+        <h2 id="detail-title" class="detail-title"></h2>
+        <p id="detail-region" class="detail-region"></p>
+      </div>
+      <button class="close-btn" id="close-detail" aria-label="Փակել">
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
-    <div id="sidebar-body">
-      <p id="sidebar-desc" class="sidebar-desc-text"></p>
-      <div id="sidebar-videos"></div>
-      <div class="sidebar-share">
-        <button class="share-btn" id="btn-share" aria-label="Կիսվել հղումով">
-          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" style="width:14px;height:14px">
-            <circle cx="13" cy="3" r="1.5" stroke="currentColor" stroke-width="1.4"/>
-            <circle cx="3" cy="8" r="1.5" stroke="currentColor" stroke-width="1.4"/>
-            <circle cx="13" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/>
-            <path d="M4.5 7.5l7-3.5M4.5 8.5l7 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <div class="panel-scroll" id="detail-body">
+      <p id="detail-desc" class="detail-desc"></p>
+      <div id="detail-videos"></div>
+      <p id="detail-source" class="detail-source"></p>
+      <div class="detail-actions">
+        <button class="btn btn-ghost" id="btn-share">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="12.5" cy="3.5" r="1.8" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="3.5" cy="8" r="1.8" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="12.5" cy="12.5" r="1.8" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M5.1 7.2l5.8-2.9M5.1 8.8l5.8 2.9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
           </svg>
-          Կիսվել
+          <span id="share-label">Կիսվել</span>
         </button>
       </div>
     </div>
@@ -127,20 +182,17 @@
 
   <!-- ===== LIST PANEL ===== -->
   <div id="list-panel" aria-label="Բոլոր դեպքերի ցուցակ" aria-hidden="true">
-    <div class="list-panel-head">
-      <h2 class="list-panel-title">Բոլոր դեպքերը</h2>
+    <div class="panel-head">
+      <h2 class="panel-title">Դեպքերի ցուցակ</h2>
       <button class="close-btn" id="close-list" aria-label="Փակել">
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
-    <div id="list-search-wrap">
-      <input type="search" id="list-search" placeholder="Ֆիլտրել ցուցակը..." aria-label="Ֆիլտրել ցուցակը">
-    </div>
-    <div id="incidents-list" role="list"></div>
+    <div class="panel-scroll" id="incidents-list" role="list"></div>
   </div>
-  <div id="list-overlay"></div>
+  <div id="list-overlay" class="overlay"></div>
 
   <!-- ===== INFO MODAL ===== -->
   <div id="info-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title" aria-hidden="true">
@@ -154,19 +206,12 @@
       <p>Հայաստանի Հանրապետությունում դիտված ջրհեղեղների տեղեկատվական հարթակը համախմբում է սոցիալական ցանցերի օգտատերերի, պետական, մասնավոր, կրթական, գիտական և քաղաքացիական կազմակերպությունների կողմից հրապարակված ջրհեղեղների տեսանյութերը։</p>
       <h3>Ինչպե՞ս օգտվել</h3>
       <ul>
-        <li><strong>Դիտել.</strong> Սեղմեք քարտեզի ցանկացած կետ՝ տեսանյութ դիտելու համար</li>
-        <li><strong>Ֆիլտրել.</strong> Ներքևի ժամանակային շարժիչով ընտրեք ամսաթվերի միջակայք</li>
+        <li><strong>Դիտել.</strong> Սեղմեք քարտեզի ցանկացած կետ՝ տեսանյութը դիտելու համար</li>
+        <li><strong>Ֆիլտրել.</strong> Ձախ վահանակից ընտրեք ամիսների միջակայքը և մարզերը</li>
         <li><strong>Փնտրել.</strong> Վերևի որոնման դաշտով գտեք կոնկրետ դեպք</li>
         <li><strong>Ցուցակ.</strong> «Ցուցակ» կոճակով դիտեք բոլոր դեպքերի ցանկը</li>
-        <li><strong>Ուղարկել.</strong> Ձեր ունեցած տեսանյութն ուղարկեք «Ներկայացնել» կոճակով</li>
+        <li><strong>Ներկայացնել.</strong> Ձեր տեղեկությունը լրացրեք «Ներկայացնել» ձևաթղթով</li>
       </ul>
-      <div class="legend-block">
-        <h3>Ժամանակային պատկեր</h3>
-        <div class="legend-row"><span class="legend-dot" style="background:#00a97a"></span><span>2025–այժմ</span></div>
-        <div class="legend-row"><span class="legend-dot" style="background:#1a6fa8"></span><span>2020–2024</span></div>
-        <div class="legend-row"><span class="legend-dot" style="background:#f59e0b"></span><span>2016–2019</span></div>
-        <div class="legend-row"><span class="legend-dot" style="background:#e85d3a"></span><span>2014–2015</span></div>
-      </div>
       <p class="modal-footer-note">Սույն հարթակը հանդիսանում է <strong>GeoGeeks</strong> ՍՊԸ-ի մտավոր սեփականությունը։ Հարթակը որպես մեկ ամբողջություն կարող է օգտագործվել միայն կրթական նպատակներով՝ հղում կատարելով կազմակերպությանը։ Հարթակի՝ կոմերցիոն նպատակով օգտագործումն արգելվում է։</p>
     </div>
   </div>
@@ -179,31 +224,135 @@
           <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <h2 id="submit-title" class="sr-only">Տեսանյութի ներկայացում</h2>
-      <div class="google-form-container">
-        <!-- Replace the src URL below with your actual Google Form embed URL -->
-        <iframe
-          class="google-form-frame"
-          src=https://docs.google.com/forms/d/e/1FAIpQLSd2EOqbdgCfeMKRr6BKdMljUq8Typ8uP_Ji2M7f5M6qoaWc0g/viewform?embedded=true
-          title="Ջրհեղեղի տեսանյութի ներկայացման ձև"
-          loading="lazy">
-        </iframe>
+
+      <h2 id="submit-title">Ներկայացնել ջրհեղեղի դեպք</h2>
+      <p class="form-intro">Լրացրեք ստորև բերված դաշտերը։ Ձեր ներկայացրած տեղեկությունը կստուգվի խմբագրական թիմի կողմից և հաստատվելուց հետո կհայտնվի քարտեզի վրա։</p>
+
+      <form id="submit-form" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="f-date">Դեպքի ամսաթիվ <span class="req">*</span></label>
+            <input type="date" id="f-date" name="event_date" required>
+          </div>
+          <div class="field">
+            <label for="f-region">Մարզ <span class="req">*</span></label>
+            <select id="f-region" name="region_code" required>
+              <option value="">— Ընտրեք —</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-title">Վերնագիր <span class="req">*</span></label>
+          <input type="text" id="f-title" name="title" maxlength="200" required
+                 placeholder="Օր.՝ Ջրածածկում Գյումրու փողոցներում">
+        </div>
+
+        <div class="field">
+          <label for="f-settlement">Բնակավայր / համայնք</label>
+          <input type="text" id="f-settlement" name="settlement" maxlength="120"
+                 placeholder="Օր.՝ Գյումրի">
+        </div>
+
+        <div class="field">
+          <label for="f-desc">Նկարագրություն</label>
+          <textarea id="f-desc" name="description" rows="3" maxlength="2000"
+                    placeholder="Ի՞նչ է տեղի ունեցել, ի՞նչ վնասներ են արձանագրվել"></textarea>
+          <span class="field-hint"><span id="desc-count">0</span>/2000</span>
+        </div>
+
+        <fieldset class="field field-location">
+          <legend>Դեպքի վայրը <span class="req">*</span></legend>
+          <p class="field-hint">Սեղմեք «Նշել քարտեզի վրա» և ընտրեք ճշգրիտ կետը, կամ մուտքագրեք կոորդինատները ձեռքով։</p>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-lat">Լայնություն (lat)</label>
+              <input type="number" id="f-lat" name="lat" step="0.000001" min="38.7" max="41.4"
+                     inputmode="decimal" placeholder="40.177" required>
+            </div>
+            <div class="field">
+              <label for="f-lng">Երկայնություն (lng)</label>
+              <input type="number" id="f-lng" name="lng" step="0.000001" min="43.3" max="46.8"
+                     inputmode="decimal" placeholder="44.512" required>
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost btn-block" id="btn-pick-location">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 14.5S13 9.9 13 6.4A5 5 0 0 0 3 6.4C3 9.9 8 14.5 8 14.5z" stroke="currentColor" stroke-width="1.4"/>
+              <circle cx="8" cy="6.3" r="1.8" stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+            Նշել քարտեզի վրա
+          </button>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Տեսանյութերի հղումներ</legend>
+          <p class="field-hint">YouTube, Facebook, Instagram կամ TikTok հղումներ։ Առավելագույնը 10։</p>
+          <div id="video-inputs"></div>
+          <button type="button" class="btn btn-ghost btn-block" id="btn-add-video">+ Ավելացնել ևս մեկ հղում</button>
+        </fieldset>
+
+        <div class="field">
+          <label for="f-source">Աղբյուր</label>
+          <input type="text" id="f-source" name="source" maxlength="300"
+                 placeholder="Օր.՝ լրատվամիջոցի անվանում կամ հեղինակ">
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="f-name">Ձեր անունը</label>
+            <input type="text" id="f-name" name="submitter_name" maxlength="120" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="f-email">Էլ. փոստ</label>
+            <input type="email" id="f-email" name="submitter_email" maxlength="200" autocomplete="email"
+                   placeholder="ձեզ հետ կապվելու համար">
+          </div>
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancel-submit">Չեղարկել</button>
+          <button type="submit" class="btn btn-primary" id="btn-send-submit">Ուղարկել</button>
+        </div>
+      </form>
+
+      <div id="submit-success" class="submit-success" hidden>
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M15 24.5l6.5 6.5L33 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Շնորհակալություն</h3>
+        <p>Ձեր ներկայացրած դեպքը ստացվել է և սպասում է ստուգման։ Հաստատվելուց հետո այն կհայտնվի քարտեզի վրա։</p>
+        <button class="btn btn-primary" id="btn-close-success">Փակել</button>
       </div>
     </div>
   </div>
 
-  <!-- ===== LOADING OVERLAY ===== -->
-  <div id="loading-overlay" aria-live="polite" aria-atomic="true">
-    <div class="spinner" aria-hidden="true"></div>
-    <p>Բեռնվում է...</p>
+  <!-- ===== MAP PICK BANNER ===== -->
+  <div id="pick-banner" hidden>
+    <span>Սեղմեք քարտեզի վրա՝ դեպքի վայրը նշելու համար</span>
+    <button class="link-btn" id="cancel-pick">Չեղարկել</button>
   </div>
 
-  <!-- Scripts -->
-  <script src="data/floods.js"></script>
+  <!-- ===== LOADING / ERROR OVERLAY ===== -->
+  <div id="loading-overlay" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="loading-text">Բեռնվում է...</p>
+    <button class="btn btn-primary" id="btn-retry" hidden>Կրկին փորձել</button>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/api.js"></script>
   <script src="assets/js/map.js"></script>
+  <script src="assets/js/filters.js"></script>
+  <script src="assets/js/submit.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>
