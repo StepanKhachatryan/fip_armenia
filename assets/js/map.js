@@ -6,6 +6,7 @@ var map;
 var markerCluster;
 var floodIcon;
 var pickMode = false;
+var currentDetailItem = null;   /* incident shown in the detail panel */
 var pickMarker = null;
 var onPickComplete = null;
 
@@ -117,6 +118,7 @@ function fitToData(data) {
 /* ---- Detail panel ---- */
 function openDetail(item) {
   var panel = document.getElementById('detail-panel');
+  currentDetailItem = item;
 
   document.getElementById('detail-date').textContent  = formatFullDate(item.date);
   document.getElementById('detail-title').textContent = item.title;
@@ -151,6 +153,7 @@ function openDetail(item) {
 
 function closeDetail() {
   var panel = document.getElementById('detail-panel');
+  currentDetailItem = null;
   panel.classList.remove('active');
   panel.setAttribute('aria-hidden', 'true');
   /* Stop playback by tearing the iframes down. */

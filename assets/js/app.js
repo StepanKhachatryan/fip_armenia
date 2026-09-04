@@ -128,6 +128,11 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('close-detail').addEventListener('click', closeDetail);
   document.getElementById('btn-share').addEventListener('click', shareIncident);
 
+  /* Add a clip to the incident currently open, rather than filing a new one. */
+  document.getElementById('btn-add-video-here').addEventListener('click', function () {
+    if (currentDetailItem) openAddVideoFor(currentDetailItem);
+  });
+
   /* Swipe the grip down to dismiss the detail sheet on touch devices. */
   (function () {
     var grip = document.getElementById('detail-grip'), startY = 0;

@@ -87,7 +87,8 @@ function normalizeVideoUrl(raw) {
     if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) return null;
     return {
       url: 'https://www.youtube.com/embed/' + id,
-      ratio: vertical ? RATIO_TALL : RATIO_WIDE
+      ratio: vertical ? RATIO_TALL : RATIO_WIDE,
+      platform: vertical ? 'YouTube Shorts' : 'YouTube'
     };
   }
 
@@ -96,7 +97,11 @@ function normalizeVideoUrl(raw) {
       /* Facebook states the real per-video box in the embed URL. */
       var w = parseInt(url.searchParams.get('width'), 10);
       var h = parseInt(url.searchParams.get('height'), 10);
-      return { url: url.href, ratio: clampRatio(w && h ? w / h : RATIO_TALL) };
+      return {
+        url: url.href,
+        ratio: clampRatio(w && h ? w / h : RATIO_TALL),
+        platform: 'Facebook'
+      };
     }
     /* A plain reel/video link: reels are vertical, everything else 16:9. */
     var isReel = /^\/reels?\//.test(path);
@@ -105,7 +110,8 @@ function normalizeVideoUrl(raw) {
       url: 'https://www.facebook.com/plugins/video.php?href=' +
            encodeURIComponent(url.href) + '&show_text=false' +
            '&width=' + box.w + '&height=' + box.h,
-      ratio: clampRatio(box.w / box.h)
+      ratio: clampRatio(box.w / box.h),
+      platform: isReel ? 'Facebook Reel' : 'Facebook'
     };
   }
 
@@ -117,14 +123,19 @@ function normalizeVideoUrl(raw) {
        slightly taller card. */
     return {
       url: 'https://www.instagram.com/' + kind + '/' + ig[2] + '/embed/',
-      ratio: kind === 'p' ? 0.8 : RATIO_TALL
+      ratio: kind === 'p' ? 0.8 : RATIO_TALL,
+      platform: kind === 'p' ? 'Instagram' : 'Instagram Reel'
     };
   }
 
   if (host === 'tiktok.com') {
     var tk = path.match(/(?:\/embed(?:\/v2)?\/|\/video\/)(\d{6,25})/);
     if (!tk) return null;
-    return { url: 'https://www.tiktok.com/embed/v2/' + tk[1], ratio: RATIO_TALL };
+    return {
+      url: 'https://www.tiktok.com/embed/v2/' + tk[1],
+      ratio: RATIO_TALL,
+      platform: 'TikTok'
+    };
   }
 
   return null;

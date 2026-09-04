@@ -18,7 +18,12 @@ repository — the map fetches everything at runtime.
   the selected incident, with a shareable `?id=` deep link. An incident may
   carry up to 25 clips, and each one is rendered at its own aspect ratio.
 - **Reporting** — the "Ներկայացնել" button opens an in-app form that writes
-  straight to the moderation queue. No Google Forms.
+  straight to the moderation queue. No Google Forms. Reporters paste an
+  ordinary share link (not an embed address) and see a live preview of what
+  the link resolved to before sending.
+- **Adding to an existing incident** — "Ավելացնել տեսանյութ" on an open
+  incident, or the second tab of the form, files extra clips against a flood
+  that is already on the map instead of creating a duplicate point.
 - **Responsive** — on narrow screens both rails become bottom sheets and the
   filters move behind a floating button.
 
@@ -29,6 +34,12 @@ repository — the map fetches everything at runtime.
 | `public.regions`          | The 10 marzes + Yerevan (code, Armenian + English name) |
 | `public.floods`           | Published incidents rendered on the map              |
 | `public.flood_submissions`| Public reports awaiting review                       |
+
+A submission has a `kind`: `new` carries a full incident (date, title,
+coordinates, region), while `addition` carries only video links plus the
+`target_flood_id` they belong to. A database check constraint enforces the
+right shape for each, so an addition can never arrive without a target and a
+`new` can never arrive without coordinates.
 
 Row level security:
 
@@ -80,8 +91,41 @@ set status = 'approved'
 where id = '<submission-uuid>';
 ```
 
+For an `addition`, append its links to the incident it targets instead:
+
+```sql
+update public.floods f
+set videos = f.videos || s.videos
+from public.flood_submissions s
+where s.id = '<submission-uuid>'
+  and s.kind = 'addition'
+  and f.id = s.target_flood_id;
+
+update public.flood_submissions
+set status = 'approved'
+where id = '<submission-uuid>';
+```
+
 Rejecting one is just `status = 'rejected'` with an optional `review_note`.
 Published rows appear on the map on the next page load.
+
+### Fixing a bad link
+
+The form validates every link and previews it, so broken links are usually
+caught before they are sent. Once a clip is published, only a moderator can
+change it — a reporter can flag it through `submitter_note`. To repair one:
+
+```sql
+-- replace a single link
+update public.floods
+set videos = array_replace(videos, '<old url>', '<new url>')
+where id = <flood id>;
+
+-- or drop it
+update public.floods
+set videos = array_remove(videos, '<bad url>')
+where id = <flood id>;
+```
 
 ## Running locally
 

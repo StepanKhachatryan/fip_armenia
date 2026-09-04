@@ -167,6 +167,12 @@
       <div id="detail-videos"></div>
       <p id="detail-source" class="detail-source"></p>
       <div class="detail-actions">
+        <button class="btn btn-ghost" id="btn-add-video-here">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Ավելացնել տեսանյութ
+        </button>
         <button class="btn btn-ghost" id="btn-share">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <circle cx="12.5" cy="3.5" r="1.8" stroke="currentColor" stroke-width="1.4"/>
@@ -226,9 +232,43 @@
       </button>
 
       <h2 id="submit-title">Ներկայացնել ջրհեղեղի դեպք</h2>
-      <p class="form-intro">Լրացրեք ստորև բերված դաշտերը։ Ձեր ներկայացրած տեղեկությունը կստուգվի խմբագրական թիմի կողմից և հաստատվելուց հետո կհայտնվի քարտեզի վրա։</p>
+      <p class="form-intro">Ձեր ներկայացրած տեղեկությունը կստուգվի խմբագրական թիմի կողմից և հաստատվելուց հետո կհայտնվի քարտեզի վրա։</p>
 
-      <form id="submit-form" novalidate>
+      <div class="mode-switch" role="tablist" aria-label="Ներկայացման տեսակ">
+        <button type="button" class="mode-tab is-active" id="mode-new" role="tab" aria-selected="true">
+          Նոր դեպք
+        </button>
+        <button type="button" class="mode-tab" id="mode-addition" role="tab" aria-selected="false">
+          Տեսանյութ՝ առկա դեպքին
+        </button>
+      </div>
+
+      <form id="submit-form" class="mode-is-new" novalidate>
+
+        <!-- ===== addition mode: choose the incident ===== -->
+        <div class="only-addition">
+          <div class="field" id="target-picker">
+            <label for="target-search">Ո՞ր դեպքին եք ավելացնում <span class="req">*</span></label>
+            <input type="search" id="target-search" autocomplete="off"
+                   placeholder="Որոնել ըստ վերնագրի, բնակավայրի կամ մարզի...">
+            <div id="target-results" class="target-results" role="listbox"></div>
+          </div>
+
+          <div class="field" id="target-chosen" hidden>
+            <label>Ընտրված դեպքը</label>
+            <div class="target-card">
+              <div class="target-card-body">
+                <span class="target-card-date" id="target-date"></span>
+                <span class="target-card-title" id="target-title"></span>
+                <span class="target-card-region" id="target-region"></span>
+              </div>
+              <button type="button" class="link-btn" id="btn-change-target">Փոխել</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== new-incident fields ===== -->
+        <div class="only-new">
         <div class="form-row">
           <div class="field">
             <label for="f-date">Դեպքի ամսաթիվ <span class="req">*</span></label>
@@ -284,18 +324,25 @@
             Նշել քարտեզի վրա
           </button>
         </fieldset>
+        </div><!-- /.only-new -->
 
         <fieldset class="field">
           <legend>Տեսանյութերի հղումներ</legend>
-          <p class="field-hint">YouTube, Facebook, Instagram կամ TikTok հղումներ։ Մեկ դեպքին կարող եք կցել մինչև <span id="max-videos-hint">25</span> տեսանյութ։</p>
+          <p class="field-hint">Տեղադրեք տեսանյութի <strong>սովորական հղումը</strong> (այն, ինչ պատճենում եք հասցեագոտուց կամ «Share» կոճակից) — embed հասցե պատրաստելու կարիք չկա։ Ընդունվում են YouTube, Facebook, Instagram և TikTok հղումներ։ Մեկ դեպքին կարող եք կցել մինչև <span id="max-videos-hint">25</span> տեսանյութ։ Ներքևում անմիջապես կտեսնեք, թե ինչ է գտնվել հղումով։</p>
           <div id="video-inputs"></div>
           <button type="button" class="btn btn-ghost btn-block" id="btn-add-video">+ Ավելացնել ևս մեկ հղում</button>
         </fieldset>
 
-        <div class="field">
+        <div class="field only-new">
           <label for="f-source">Աղբյուր</label>
           <input type="text" id="f-source" name="source" maxlength="300"
                  placeholder="Օր.՝ լրատվամիջոցի անվանում կամ հեղինակ">
+        </div>
+
+        <div class="field">
+          <label for="f-note">Նշում խմբագրին</label>
+          <textarea id="f-note" name="submitter_note" rows="2" maxlength="1000"
+                    placeholder="Օր.՝ «նախորդ հղումս սխալ էր, խնդրում եմ փոխարինել սրանով»"></textarea>
         </div>
 
         <div class="form-row">
@@ -324,7 +371,7 @@
           <path d="M15 24.5l6.5 6.5L33 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <h3>Շնորհակալություն</h3>
-        <p>Ձեր ներկայացրած դեպքը ստացվել է և սպասում է ստուգման։ Հաստատվելուց հետո այն կհայտնվի քարտեզի վրա։</p>
+        <p id="submit-success-text">Ձեր ներկայացրած դեպքը ստացվել է և սպասում է ստուգման։ Հաստատվելուց հետո այն կհայտնվի քարտեզի վրա։</p>
         <button class="btn btn-primary" id="btn-close-success">Փակել</button>
       </div>
     </div>

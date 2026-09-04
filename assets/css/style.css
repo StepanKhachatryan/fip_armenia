@@ -615,6 +615,9 @@ body.picking .leaflet-container { cursor: crosshair; }
 }
 
 .detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid var(--c-border-soft);
@@ -948,15 +951,163 @@ fieldset.field .field:last-child { margin-bottom: 0; }
 }
 .field-location .field-hint { margin: 0 0 12px; }
 
+/* --- mode switch: new incident vs. adding to an existing one --- */
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 18px;
+  padding: 4px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--c-surface-2);
+}
+
+.mode-tab {
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--c-text-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.mode-tab:hover { color: var(--c-text); }
+.mode-tab.is-active {
+  background: var(--c-surface);
+  color: var(--c-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-is-new .only-addition { display: none; }
+.mode-is-addition .only-new { display: none; }
+
+/* --- picking the incident an addition belongs to --- */
+.target-results {
+  max-height: 232px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-top: 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--c-surface-2);
+}
+
+.target-option {
+  display: block;
+  width: 100%;
+  text-align: start;
+  padding: 9px 11px;
+  border: none;
+  border-bottom: 1px solid var(--c-border-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: background .12s;
+}
+.target-option:last-child { border-bottom: none; }
+.target-option:hover { background: var(--c-accent-weak); }
+
+.target-option-date {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-accent);
+}
+.target-option-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 2px 0;
+}
+.target-option-region {
+  display: block;
+  font-size: 11.5px;
+  color: var(--c-text-muted);
+}
+
+.target-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--c-accent);
+  border-radius: var(--r-md);
+  background: var(--c-accent-weak);
+}
+.target-card-body { min-width: 0; }
+.target-card-date {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-accent);
+}
+.target-card-title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 2px 0;
+}
+.target-card-region {
+  display: block;
+  font-size: 11.5px;
+  color: var(--c-text-muted);
+}
+
+/* --- one video link row, with its live check and preview --- */
 .video-input-row {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--c-border-soft);
+}
+.video-input-row:last-child { border-bottom: none; margin-bottom: 4px; }
+
+.video-input-line {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 8px;
 }
 .video-input-row .video-url { flex: 1; min-width: 0; }
+.video-input-row.is-valid   .video-url { border-color: var(--c-accent); }
+.video-input-row.is-invalid .video-url { border-color: var(--c-danger); }
+
 .remove-video { width: 32px; height: 32px; flex: none; }
 .remove-video svg { width: 12px; height: 12px; }
+
+.video-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--c-text-muted);
+}
+.video-status .status-icon { font-weight: 700; flex: none; }
+.is-valid   .video-status .status-icon { color: var(--c-accent); }
+.is-invalid .video-status { color: var(--c-danger); }
+
+.video-preview { margin-top: 8px; }
+
+.video-preview-box {
+  position: relative;
+  max-width: 100%;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--c-border);
+}
+.video-preview-box iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
 
 .form-error {
   margin: 4px 0 14px;
@@ -970,14 +1121,22 @@ fieldset.field .field:last-child { margin-bottom: 0; }
   overflow-wrap: anywhere;
 }
 
+/* Pinned to the bottom of the dialog: the live link previews grow and
+   shrink above it, and the primary action must not move under the cursor. */
 .form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
-  padding-top: 16px;
+  padding: 16px 0 28px;
   border-top: 1px solid var(--c-border-soft);
+  background: var(--c-surface);
 }
+.modal-content--form { padding-bottom: 0; }
+.submit-success { padding-bottom: 28px; }
 
 .submit-success {
   padding: 20px 0 8px;
@@ -1133,8 +1292,10 @@ fieldset.field .field:last-child { margin-bottom: 0; }
   .modal.active .modal-content { transform: none; }
 
   .form-row { grid-template-columns: 1fr; gap: 0; }
-  .form-actions { flex-direction: column-reverse; }
-  .form-actions .btn { width: 100%; height: 42px; }
+  .form-actions { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+  .form-actions .btn { flex: 1; height: 42px; }
+  .modal-content--form { padding-bottom: 0; }
+  .submit-success { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
 
   .field input,
   .field select,
