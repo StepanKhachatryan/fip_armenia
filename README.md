@@ -83,11 +83,38 @@ to file a pending report, nothing more.
 land in `flood_submissions` with `status = 'pending'`; the map only ever reads
 `floods`. If a submitted video "does not show up", that is why.
 
-### By email (the normal way)
+### The moderation queue (the normal way)
 
-Every new report emails the address in `private.app_settings.notify_email`
-(currently `geogeeksllc@gmail.com`) with the submission's details and a
-**Բացել և հաստատել** button. The button opens the `moderate` Edge Function,
+The `moderate` Edge Function serves a standing dashboard listing every pending
+report, each with **Հաստատել** / **Մերժել** buttons. Approving sends you
+straight back to the list, so a backlog can be cleared in a few clicks.
+
+```
+https://<project>.supabase.co/functions/v1/moderate?key=<admin_key>
+```
+
+Bookmark it. The key lives in `private.app_settings.admin_key` and is checked
+by `verify_admin_key()`, which compares SHA-256 digests inside Postgres, so
+the secret never leaves the database. A wrong or truncated key gets a bare
+403.
+
+Treat the URL as a password: anyone holding it can moderate, and it will sit
+in your browser history. To rotate it:
+
+```sql
+update private.app_settings
+set value = encode(extensions.gen_random_bytes(24), 'hex')
+where key = 'admin_key';
+
+select value from private.app_settings where key = 'admin_key';
+```
+
+### By email
+
+Once configured, every new report also emails the address in
+`private.app_settings.notify_email` (currently `geogeeksllc@gmail.com`) with
+the submission's details and a **Բացել և հաստատել** button, so you do not
+have to remember to check the queue. The button opens the `moderate` Edge Function,
 which shows the full report and two buttons — approve or reject. One click and
 the incident is live.
 
