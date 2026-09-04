@@ -77,37 +77,34 @@ to file a pending report, nothing more.
 
 ## Moderating submissions
 
-Review the queue in the Supabase dashboard, then promote a good report:
+**Nothing a visitor submits appears on the map until it is approved.** Reports
+land in `flood_submissions` with `status = 'pending'`; the map only ever reads
+`floods`. If a submitted video "does not show up", that is why — check the
+queue first.
+
+Review what is waiting, in the Supabase SQL editor:
 
 ```sql
-insert into public.floods
-  (event_date, title, description, lat, lng, region_code, settlement, videos, source)
-select event_date, title, description, lat, lng, region_code, settlement, videos, source
+select id, kind, target_flood_id, event_date, title, videos, submitter_note, created_at
 from public.flood_submissions
-where id = '<submission-uuid>';
-
-update public.flood_submissions
-set status = 'approved'
-where id = '<submission-uuid>';
+where status = 'pending'
+order by created_at;
 ```
 
-For an `addition`, append its links to the incident it targets instead:
+Then publish or turn one down with a single call:
 
 ```sql
-update public.floods f
-set videos = f.videos || s.videos
-from public.flood_submissions s
-where s.id = '<submission-uuid>'
-  and s.kind = 'addition'
-  and f.id = s.target_flood_id;
-
-update public.flood_submissions
-set status = 'approved'
-where id = '<submission-uuid>';
+select public.approve_submission('<submission-uuid>');   -- returns the flood id
+select public.reject_submission('<submission-uuid>', 'why');
 ```
 
-Rejecting one is just `status = 'rejected'` with an optional `review_note`.
-Published rows appear on the map on the next page load.
+`approve_submission` does the right thing per kind: a `new` submission becomes
+a fresh row in `floods`, while an `addition` appends its links to the incident
+it targets, skipping any link that incident already carries. Both mark the
+submission `approved`. The functions are `SECURITY DEFINER` with `EXECUTE`
+revoked from `anon` and `authenticated`, so only the service role — the SQL
+editor or the dashboard — can moderate. Published rows appear on the map on
+the next page load.
 
 ### Fixing a bad link
 
