@@ -24,6 +24,8 @@ repository — the map fetches everything at runtime.
 - **Adding to an existing incident** — "Ավելացնել տեսանյութ" on an open
   incident, or the second tab of the form, files extra clips against a flood
   that is already on the map instead of creating a duplicate point.
+- **Approval by email** — each report emails the moderator a one-click
+  approve/reject link; nothing reaches the map before that.
 - **Responsive** — on narrow screens both rails become bottom sheets and the
   filters move behind a floating button.
 
@@ -79,32 +81,74 @@ to file a pending report, nothing more.
 
 **Nothing a visitor submits appears on the map until it is approved.** Reports
 land in `flood_submissions` with `status = 'pending'`; the map only ever reads
-`floods`. If a submitted video "does not show up", that is why — check the
-queue first.
+`floods`. If a submitted video "does not show up", that is why.
 
-Review what is waiting, in the Supabase SQL editor:
+### By email (the normal way)
+
+Every new report emails the address in `private.app_settings.notify_email`
+(currently `geogeeksllc@gmail.com`) with the submission's details and a
+**Բացել և հաստատել** button. The button opens the `moderate` Edge Function,
+which shows the full report and two buttons — approve or reject. One click and
+the incident is live.
+
+The emailed link carries a 64-hex token minted by the database and never
+shown to the submitter (RLS gives them no read access to the queue). It is
+single use. A `GET` only renders the confirmation page, so mail scanners and
+link previewers cannot approve anything by fetching the URL; the change needs
+the `POST` behind the button. Concurrent clicks are serialised by a row lock
+in `approve_submission`, so a double click cannot create two incidents.
+
+### Turning the email on
+
+Email needs one credential. Supabase's built-in mail is reserved for auth, so
+notifications go through [Resend](https://resend.com):
+
+1. Sign up at resend.com **with `geogeeksllc@gmail.com`** and create an API key.
+2. Store it (Supabase → SQL Editor):
+
+   ```sql
+   insert into private.app_settings (key, value)
+   values ('resend_api_key', 're_your_key_here')
+   on conflict (key) do update set value = excluded.value;
+   ```
+
+Signing up with that address means Resend's default sender,
+`onboarding@resend.dev`, can deliver to it with no domain to verify. To send
+from your own domain later, verify it in Resend and update `mail_from`.
+
+Until the key is set the trigger simply does nothing — submissions still save
+normally, they just do not page anyone. To change the recipient, update
+`notify_email` the same way.
+
+### By hand
+
+The queue is always reviewable in the SQL editor:
 
 ```sql
 select id, kind, target_flood_id, event_date, title, videos, submitter_note, created_at
 from public.flood_submissions
 where status = 'pending'
 order by created_at;
-```
 
-Then publish or turn one down with a single call:
-
-```sql
 select public.approve_submission('<submission-uuid>');   -- returns the flood id
 select public.reject_submission('<submission-uuid>', 'why');
 ```
 
 `approve_submission` does the right thing per kind: a `new` submission becomes
-a fresh row in `floods`, while an `addition` appends its links to the incident
-it targets, skipping any link that incident already carries. Both mark the
-submission `approved`. The functions are `SECURITY DEFINER` with `EXECUTE`
-revoked from `anon` and `authenticated`, so only the service role — the SQL
-editor or the dashboard — can moderate. Published rows appear on the map on
-the next page load.
+a fresh row in `floods`, an `addition` appends its links to the incident it
+targets while skipping any link that incident already carries. Both mark the
+submission approved. The functions are `SECURITY DEFINER` with `EXECUTE`
+revoked from `anon` and `authenticated` and granted to `service_role`, so only
+the SQL editor and the Edge Function can moderate. Published rows appear on
+the map on the next page load.
+
+### A note on pg_net
+
+Supabase grants `EXECUTE` on `net.http_post` to `PUBLIC` when pg_net is
+installed, and those grants belong to `supabase_admin`, so the `postgres` role
+cannot revoke them. This is not reachable from the web: PostgREST only exposes
+`public`, and calling `/rest/v1/rpc/http_post` with the publishable key returns
+`404 PGRST202`. No anonymous client can run SQL, so there is no path to it.
 
 ### Fixing a bad link
 
