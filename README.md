@@ -85,18 +85,18 @@ land in `flood_submissions` with `status = 'pending'`; the map only ever reads
 
 ### The moderation queue (the normal way)
 
-The `moderate` Edge Function serves a standing dashboard listing every pending
-report, each with **Հաստատել** / **Մերժել** buttons. Approving sends you
-straight back to the list, so a backlog can be cleared in a few clicks.
+`admin.html` is the moderation page: it lists every pending report with
+**Հաստատել** / **Մերժել** buttons and removes each card as you act on it.
+Open it on the site's own host with the admin key:
 
 ```
-https://<project>.supabase.co/functions/v1/moderate?key=<admin_key>
+https://<your-site>/admin.html?key=<admin_key>
 ```
 
-Bookmark it. The key lives in `private.app_settings.admin_key` and is checked
-by `verify_admin_key()`, which compares SHA-256 digests inside Postgres, so
-the secret never leaves the database. A wrong or truncated key gets a bare
-403.
+Bookmark that. The key lives in `private.app_settings.admin_key` and is
+checked by `verify_admin_key()`, which compares SHA-256 digests inside
+Postgres, so the secret never leaves the database — the API only learns yes
+or no. A wrong or truncated key gets a bare 403.
 
 Treat the URL as a password: anyone holding it can moderate, and it will sit
 in your browser history. To rotate it:
@@ -109,43 +109,15 @@ where key = 'admin_key';
 select value from private.app_settings where key = 'admin_key';
 ```
 
+**Why the page is not served by the Edge Function.** Supabase's edge gateway
+rewrites every function response to `content-type: text/plain` and adds
+`x-content-type-options: nosniff` and `content-security-policy: default-src
+'none'; sandbox`. A function URL therefore cannot render an HTML page — a
+browser shows the raw markup as text. So `moderate` is a JSON API and the UI
+is a normal page on the site's host. Headers other than `content-type` do
+survive the gateway, which is what lets the API send CORS.
+
 ### By email
-
-Once configured, every new report also emails the address in
-`private.app_settings.notify_email` (currently `geogeeksllc@gmail.com`) with
-the submission's details and a **Բացել և հաստատել** button, so you do not
-have to remember to check the queue. The button opens the `moderate` Edge Function,
-which shows the full report and two buttons — approve or reject. One click and
-the incident is live.
-
-The emailed link carries a 64-hex token minted by the database and never
-shown to the submitter (RLS gives them no read access to the queue). It is
-single use. A `GET` only renders the confirmation page, so mail scanners and
-link previewers cannot approve anything by fetching the URL; the change needs
-the `POST` behind the button. Concurrent clicks are serialised by a row lock
-in `approve_submission`, so a double click cannot create two incidents.
-
-### Turning the email on
-
-Email needs one credential. Supabase's built-in mail is reserved for auth, so
-notifications go through [Resend](https://resend.com):
-
-1. Sign up at resend.com **with `geogeeksllc@gmail.com`** and create an API key.
-2. Store it (Supabase → SQL Editor):
-
-   ```sql
-   insert into private.app_settings (key, value)
-   values ('resend_api_key', 're_your_key_here')
-   on conflict (key) do update set value = excluded.value;
-   ```
-
-Signing up with that address means Resend's default sender,
-`onboarding@resend.dev`, can deliver to it with no domain to verify. To send
-from your own domain later, verify it in Resend and update `mail_from`.
-
-Until the key is set the trigger simply does nothing — submissions still save
-normally, they just do not page anyone. To change the recipient, update
-`notify_email` the same way.
 
 ### By hand
 
