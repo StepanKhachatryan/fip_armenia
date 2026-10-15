@@ -87,7 +87,10 @@ land in `flood_submissions` with `status = 'pending'`; the map only ever reads
 
 `admin.html` is the moderation page: it lists every pending report with
 **Հաստատել** / **Մերժել** buttons and removes each card as you act on it.
-Open it on the site's own host with the admin key:
+Above the queue it shows running totals — pending, approved, rejected,
+incidents on the map, video links — and below it the twenty most recently
+handled reports, so an empty queue reads as "all caught up" rather than as a
+broken page. Open it on the site's own host with the admin key:
 
 ```
 https://<your-site>/admin.html?key=<admin_key>

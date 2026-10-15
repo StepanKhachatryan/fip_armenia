@@ -60,6 +60,51 @@
     }
     .btn-danger:hover:not(:disabled) { background: var(--c-danger-weak); }
 
+    .stats {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .stat {
+      flex: 1 1 auto; min-width: 92px;
+      padding: 10px 12px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      background: var(--c-surface);
+    }
+    .stat b { display: block; font-size: 18px; font-weight: 700; line-height: 1.2; }
+    .stat span { font-size: 11.5px; color: var(--c-text-muted); }
+    .stat.is-pending b { color: var(--c-accent); }
+
+    .section-title {
+      margin: 26px 0 10px;
+      font-size: 11.5px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      color: var(--c-text-muted);
+    }
+
+    .handled {
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      background: var(--c-surface);
+      overflow: hidden;
+    }
+    .handled-row {
+      display: flex; align-items: baseline; gap: 10px;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--c-border-soft);
+      font-size: 13px;
+    }
+    .handled-row:last-child { border-bottom: none; }
+    .handled-row .label { flex: 1; min-width: 0; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap; }
+    .handled-row .when { color: var(--c-text-muted); font-size: 11.5px; white-space: nowrap; }
+    .pill {
+      flex: none; padding: 1px 8px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 700;
+    }
+    .pill-approved { background: var(--c-accent-weak); color: var(--c-accent); }
+    .pill-rejected { background: var(--c-danger-weak); color: var(--c-danger); }
+
     .state {
       text-align: center;
       padding: 40px 16px;
@@ -89,7 +134,9 @@
     </header>
 
     <div id="flash" class="flash" hidden></div>
+    <div id="stats" class="stats" hidden></div>
     <div id="queue"></div>
+    <div id="history" hidden></div>
   </div>
 
   <script src="assets/js/config.js"></script>
@@ -165,9 +212,42 @@
       + '</div></div>';
   }
 
+  function renderStats(st) {
+    var box = document.getElementById('stats');
+    if (!st) { box.hidden = true; return; }
+    box.innerHTML =
+        '<div class="stat is-pending"><b>' + st.pending + '</b><span>սպասող</span></div>'
+      + '<div class="stat"><b>' + st.approved + '</b><span>հաստատված</span></div>'
+      + '<div class="stat"><b>' + st.rejected + '</b><span>մերժված</span></div>'
+      + '<div class="stat"><b>' + st.floods + '</b><span>դեպք քարտեզին</span></div>'
+      + '<div class="stat"><b>' + st.videos + '</b><span>տեսանյութ</span></div>';
+    box.hidden = false;
+  }
+
+  function renderHistory(list) {
+    var box = document.getElementById('history');
+    if (!list || !list.length) { box.hidden = true; return; }
+
+    box.innerHTML = '<p class="section-title">Վերջին մշակվածները</p><div class="handled">'
+      + list.map(function (h) {
+          var approved = h.status === 'approved';
+          return '<div class="handled-row">'
+            + '<span class="pill ' + (approved ? 'pill-approved' : 'pill-rejected') + '">'
+            +   (approved ? 'հաստատված' : 'մերժված') + '</span>'
+            + '<span class="label">' + escHtml(h.label)
+            +   (h.kind === 'addition' ? ' <span class="when">(+' + h.videos + ' տեսանյութ)</span>' : '')
+            + '</span>'
+            + '<span class="when">' + escHtml(String(h.created_at).slice(0, 10)) + '</span>'
+            + '</div>';
+        }).join('')
+      + '</div>';
+    box.hidden = false;
+  }
+
   function render(list) {
     if (!list.length) {
-      setState('<div class="state"><strong>Սպասող հայտեր չկան</strong>Ամեն ինչ մշակված է։</div>', '0 սպասող հայտ');
+      setState('<div class="state"><strong>Սպասող հայտեր չկան</strong>'
+        + 'Ամեն ինչ մշակված է։ Նոր հայտ ստանալիս այն կհայտնվի այստեղ։</div>', '0 սպասող հայտ');
       return;
     }
     setState(list.map(cardHtml).join(''), list.length + ' սպասող հայտ');
@@ -196,7 +276,13 @@
           return;
         }
         if (res.s !== 200) throw new Error(res.b.error || ('HTTP ' + res.s));
-        render(adminKey ? res.b.pending : [res.b.submission]);
+        if (adminKey) {
+          renderStats(res.b.stats);
+          renderHistory(res.b.recent);
+          render(res.b.pending);
+        } else {
+          render([res.b.submission]);
+        }
       })
       .catch(function (err) {
         console.error(err);
@@ -236,6 +322,8 @@
         var left = document.querySelectorAll('.queue-card').length;
         document.getElementById('queue-sub').textContent = left + ' սպասող հայտ';
         if (!left) render([]);
+        /* Re-read the totals and history rather than guessing at them. */
+        refreshOverview();
       })
       .catch(function (err) {
         console.error(err);
@@ -244,6 +332,18 @@
         btn.textContent = action === 'approve' ? 'Հաստատել' : 'Մերժել';
       });
   });
+
+  function refreshOverview() {
+    if (!adminKey) return;
+    fetch(API + '?key=' + encodeURIComponent(adminKey), { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (b) {
+        if (!b) return;
+        renderStats(b.stats);
+        renderHistory(b.recent);
+      })
+      .catch(function () { /* the queue itself is already up to date */ });
+  }
 
   /* Match the map's theme preference. */
   try {
